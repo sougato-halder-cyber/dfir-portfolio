@@ -637,7 +637,7 @@ Windows Forensics 2 demonstrates how file system artifacts provide powerful fore
 By correlating Prefetch, Timeline, Jump Lists, Shortcut files, and setupapi logs, an investigator can reliably reconstruct user activity, execution history, file access, and USB usage.
 Windows Forensics 2 – COMPLETED
 
- Day 3
+ Day 4
  🐧 Linux Forensics 
 
 (System Configuration, Persistence, Execution & Logs)
