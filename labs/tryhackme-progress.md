@@ -371,3 +371,268 @@ EZTools (Eric Zimmerman)
 🏁 Status
 
 ✅ Windows Forensics 1 – COMPLETED
+
+ 
+ Day 3
+Windows Forensics 2
+
+(File System, Execution Evidence, USB & File Recovery)
+
+📌 Overview
+
+In Windows Forensics 2, we move beyond the Windows Registry and analyze file system–based forensic artifacts.
+This day focuses on identifying:
+
+Evidence of program execution
+
+File & folder access (knowledge)
+
+External device / USB usage
+
+Deleted file recovery
+
+NTFS & FAT forensic artifacts using Eric Zimmerman tools and Autopsy
+
+🗂️ File Systems in Windows
+🔹 FAT File System
+
+Variants: FAT12, FAT16, FAT32
+
+Commonly used in:
+
+USB drives
+
+SD cards
+
+Digital cameras
+
+Type	Addressable Bits	Max File Size
+FAT32	28 bits	4 GB – 1 byte
+
+📌 Limitation: No journaling, weak forensic reliability
+
+🔹 exFAT
+
+Designed for large removable media
+
+Used by digital cameras & SD cards
+
+Supports:
+
+Huge file sizes
+
+Large volumes
+
+Lightweight compared to NTFS
+
+🔹 NTFS (Most Important)
+
+Introduced with Windows NT, NTFS provides:
+
+Journaling
+
+Access controls
+
+File recovery support
+
+Advanced forensic artifacts
+
+Key NTFS Artifacts:
+File	Purpose
+$MFT	Master File Table – tracks all files
+$LogFile	NTFS transaction log
+$UsnJrnl	File change journal
+$Boot	Volume boot information
+🧰 Tools Used (Eric Zimmerman Suite)
+Tool	Purpose
+MFTECmd	Parse $MFT
+PECmd	Parse Prefetch files
+WxTCmd	Parse Windows 10 Timeline
+JLECmd	Parse Jump Lists
+LECmd	Parse Shortcut (.lnk) files
+EZViewer	View CSV outputs
+Autopsy	Deleted file recovery & browser artifacts
+🧠 Evidence of Execution (Task 5)
+🔹 Windows Prefetch
+
+Location:
+
+C:\Windows\Prefetch
+
+
+Contains:
+
+Last execution time
+
+Run count
+
+Executed program name
+
+Files used by program
+
+Command:
+
+PECmd.exe -d "C:\Windows\Prefetch" --csv output_folder
+
+
+📌 Prefetch = Strong evidence of execution
+
+🔹 Windows 10 Timeline
+
+Location:
+
+C:\Users\<user>\AppData\Local\ConnectedDevicesPlatform\*\ActivitiesCache.db
+
+
+Parsed using:
+
+WxTCmd.exe -f ActivitiesCache.db --csv output_folder
+
+
+📌 Shows:
+
+Application execution
+
+Focus time
+
+File interaction
+
+🔹 Jump Lists
+
+Location:
+
+C:\Users\<user>\AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations
+
+
+Parsed using:
+
+JLECmd.exe -d <path> --csv output_folder
+
+
+📌 Shows:
+
+Programs executed
+
+Recently opened files
+
+First & last execution time
+
+📁 File / Folder Knowledge (Task 6)
+🔹 Shortcut Files (.lnk)
+
+Locations:
+
+Recent\
+Office\Recent\
+
+
+Parsed using:
+
+LECmd.exe -d <path> --csv output_folder
+
+
+📌 Evidence:
+
+First opened time → .lnk created
+
+Last accessed time → .lnk modified
+
+Original file path
+
+USB volume details (if removable)
+
+🔹 IE / Edge WebCache
+
+Location:
+
+WebCacheV*.dat
+
+
+Includes local file access
+
+Files appear as:
+
+file:///C:/...
+
+
+Parsed using Autopsy with:
+
+Logical Files
+
+Recent Activity module
+
+🔌 External Devices / USB Forensics (Task 7)
+🔹 setupapi.dev.log (MOST IMPORTANT)
+
+Location:
+
+C:\Windows\inf\setupapi.dev.log
+
+
+📌 Contains:
+
+USB device serial number
+
+First connection time
+
+Last connection time
+
+Search keyword:
+
+USBSTOR
+
+🔹 Shortcut Files (USB Evidence)
+
+Shortcut files can reveal:
+
+USB volume name
+
+Volume serial number
+
+Drive type (Removable)
+
+📌 Correlates USB usage with file access
+
+🗑️ Deleted Files & Recovery
+🔹 Disk Image Concept
+
+Bit-by-bit copy of storage
+
+Preserves metadata
+
+Enables forensic analysis without altering evidence
+
+🔹 Recovering Deleted Files using Autopsy
+
+Steps:
+
+Create new case
+
+Add data source → Disk Image
+
+Select image (usb.001)
+
+Disable ingest modules (for speed)
+
+Navigate:
+
+File Views → Deleted Files
+
+
+Right-click → Extract File(s)
+
+📌 Deleted files are marked with ❌
+
+🧪 Key Forensic Takeaways
+Artifact	Evidence
+Prefetch	Program execution
+Timeline	App usage history
+Jump Lists	File & app access
+Shortcut (.lnk)	File knowledge
+setupapi.dev.log	USB connection
+$MFT	File existence & metadata
+🏁 Conclusion
+
+Windows Forensics 2 demonstrates how file system artifacts provide powerful forensic evidence even without registry access.
+By correlating Prefetch, Timeline, Jump Lists, Shortcut files, and setupapi logs, an investigator can reliably reconstruct user activity, execution history, file access, and USB usage.
+Windows Forensics 2 – COMPLETED
