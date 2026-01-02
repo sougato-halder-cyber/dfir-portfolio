@@ -636,3 +636,304 @@ $MFT	File existence & metadata
 Windows Forensics 2 demonstrates how file system artifacts provide powerful forensic evidence even without registry access.
 By correlating Prefetch, Timeline, Jump Lists, Shortcut files, and setupapi logs, an investigator can reliably reconstruct user activity, execution history, file access, and USB usage.
 Windows Forensics 2 – COMPLETED
+
+ Day 3
+ 🐧 Linux Forensics 
+
+(System Configuration, Persistence, Execution & Logs)
+
+📌 Overview
+
+Day 3 of Linux Forensics focuses on identifying system configuration, persistence mechanisms, evidence of execution, and log file analysis on a Linux host.
+Unlike Windows, Linux stores forensic artifacts primarily in files and logs, making file system knowledge critical for investigations.
+
+🖥️ System Configuration & Host Information
+🔹 Hostname
+
+Location
+
+/etc/hostname
+
+
+Command
+
+cat /etc/hostname
+
+
+Answer
+
+Linux4n6
+
+🔹 Timezone
+
+Location
+
+/etc/timezone
+
+
+Command
+
+cat /etc/timezone
+
+
+Answer
+
+Asia/Karachi
+
+🔹 Network Interfaces & IP Information
+
+Static config
+
+/etc/network/interfaces
+
+
+Live system
+
+ip address show
+
+
+Artifacts obtained:
+
+Interface name
+
+IP address
+
+MAC address
+
+🔹 Active Network Connections
+
+Command
+
+netstat -natp
+
+
+Question
+
+What program is listening on 127.0.0.1:5901?
+
+Answer
+
+Xtigervnc
+
+🔹 Running Process Path
+
+Command
+
+ps aux
+
+
+Question
+
+What is the full path of this program?
+
+Answer
+
+/usr/bin/Xtigervnc
+
+🔐 Persistence Mechanisms
+
+Persistence mechanisms allow programs or malware to survive system reboots.
+
+🔹 Cron Jobs
+
+Location
+
+/etc/crontab
+
+
+Command
+
+cat /etc/crontab
+
+
+Used for:
+
+Scheduled execution
+
+Malware persistence via hidden scripts
+
+🔹 Startup Services
+
+Location
+
+/etc/init.d/
+
+
+Command
+
+ls /etc/init.d/
+
+
+Services listed here automatically start during boot.
+
+🔹 Bash Startup Files
+
+User-level persistence
+
+~/.bashrc
+
+
+System-wide
+
+/etc/bash.bashrc
+/etc/profile
+
+
+Attackers often insert malicious commands here.
+
+❓ Question
+
+In the bashrc file, the size of the history file is defined.
+What is the size of the history file set for the user Ubuntu?
+
+Answer
+
+2000
+
+▶️ Evidence of Execution
+🔹 Sudo Execution History
+
+Location
+
+/var/log/auth.log
+
+
+Command
+
+cat /var/log/auth.log* | grep -i COMMAND
+
+
+Records:
+
+sudo commands
+
+Working directory (PWD)
+
+Executed binary
+
+❓ Question 1
+
+The user tryhackme used apt-get to install a package.
+What command was issued?
+
+Answer
+
+sudo apt-get install apache2
+
+❓ Question 2
+
+What was the current working directory when the command to install net-tools was issued?
+
+Answer
+
+/home/ubuntu
+
+🔹 Bash History
+
+Location
+
+~/.bash_history
+
+
+Contains:
+
+Non-sudo commands
+
+File and directory operations
+
+🔹 Vim File Access
+
+Location
+
+~/.viminfo
+
+
+Provides:
+
+Files opened in Vim
+
+Command & search history
+
+Timestamps
+
+📜 Log Files Analysis
+
+Log files are stored in:
+
+/var/log/
+
+🔹 Syslog
+
+Location
+
+/var/log/syslog*
+
+
+Command
+
+cat /var/log/syslog* | head
+
+
+Contains:
+
+System events
+
+Cron jobs
+
+Service activity
+
+🔹 Authentication Logs
+
+Location
+
+/var/log/auth.log*
+
+
+Contains:
+
+User creation
+
+Group assignments
+
+sudo activity
+
+Login attempts
+
+🔹 Third-Party Application Logs
+
+Examples:
+
+/var/log/apache2/
+/var/log/samba/
+/var/log/openvpn/
+
+
+Apache logs:
+
+access.log
+
+error.log
+
+❓ Question
+
+The machine previously had a different hostname.
+What was the previous hostname?
+
+Answer
+
+tryhackme
+
+🧠 Key Forensic Takeaways
+Artifact	Evidence Provided
+/etc/passwd	User accounts & UID
+/etc/group	Group membership
+auth.log	Sudo & authentication
+syslog	System & service events
+crontab	Scheduled persistence
+.bashrc	User-level persistence
+.bash_history	Command execution
+.viminfo	File access evidence
+🏁 Summary
+
+Linux Forensics relies heavily on log analysis, configuration files, and user artifacts rather than a centralized registry.
+By correlating data from system configuration files, persistence mechanisms, execution history, and logs, investigators can accurately reconstruct user activity and system behavior over time.
