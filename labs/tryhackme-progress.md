@@ -1623,3 +1623,272 @@ USB misuse
 Rapid triage needed
 
 👉 Collect fast → Analyze smart
+
+Day 8 – Volatility (Memory Forensics)
+
+Platform: TryHackMe
+Category: Memory Forensics | Malware Analysis | DFIR
+Tool: Volatility 3
+Language: Python
+Maintained by: Volatility Foundation
+
+🔍 Day 8 Summary
+
+Day 8-এ আমরা Memory Forensics শিখেছি, যেখানে মূল ফোকাস ছিল RAM (volatile memory) বিশ্লেষণ করা।
+Disk forensics যেখানে historical evidence দেয়, সেখানে memory forensics live attacker activity প্রকাশ করে।
+
+Volatility ব্যবহার করে আমরা:
+
+Running processes
+
+Network connections
+
+Injected malware
+
+Rootkits
+
+Ransomware artifacts
+
+সবকিছু memory dump থেকে বিশ্লেষণ করেছি।
+
+🎯 Learning Objectives
+
+Volatility কী এবং কেন গুরুত্বপূর্ণ
+
+Memory dump কীভাবে collect করা হয়
+
+Volatility 3 plugin architecture
+
+Process & network enumeration
+
+Malware hunting techniques
+
+Advanced rootkit detection
+
+Real-world memory investigations
+
+🧠 What is Volatility?
+
+Volatility হলো একটি open-source memory forensics framework যা RAM dump থেকে digital artifacts extract করে।
+
+Key Features
+
+OS-independent analysis
+
+Plugin-based architecture
+
+Windows / Linux / macOS support
+
+SOC, DFIR ও Malware Analysts দ্বারা ব্যবহৃত
+
+💾 Memory Acquisition Methods
+Bare-Metal Systems
+
+FTK Imager
+
+Redline
+
+DumpIt
+
+win32dd / win64dd
+
+Memoryze
+
+Virtual Machines
+Hypervisor	Memory File
+VMware	.vmem
+Hyper-V	.bin
+Parallels	.mem
+VirtualBox	.sav (partial)
+
+⚠️ Memory extraction সবসময় সতর্কতার সাথে করতে হয়।
+
+⚙️ Volatility Installation (Lab)
+
+Python 3
+
+Volatility 3
+
+Optional:
+
+yara-python
+
+capstone
+
+Test command:
+
+python3 vol.py -h
+
+🧩 Volatility 3 Plugin Structure
+
+Volatility 3-এ profiles আর ব্যবহার হয় না।
+OS অনুযায়ী plugin prefix ব্যবহার হয়:
+
+OS	Prefix
+Windows	windows.*
+Linux	linux.*
+macOS	mac.*
+
+Example:
+
+python3 vol.py -f memory.raw windows.info
+
+🔎 System Information Extraction
+python3 vol.py -f memory.raw windows.info
+
+
+Provides:
+
+OS version
+
+Build number
+
+Architecture
+
+Kernel details
+
+⚙️ Process Enumeration
+Process Listing Plugins
+Plugin	Purpose
+pslist	Active & terminated processes
+psscan	Hidden / unlinked processes
+pstree	Parent-child process view
+
+Commands:
+
+windows.pslist
+windows.psscan
+windows.pstree
+
+🌐 Network Enumeration
+windows.netstat
+
+
+Shows:
+
+Active connections
+
+Listening ports
+
+Suspicious IPs
+
+📦 DLL Analysis
+windows.dlllist
+
+
+Used for:
+
+Injected DLL detection
+
+Malware behavior analysis
+
+🕵️ Malware Hunting
+🔥 malfind (Code Injection Detection)
+windows.malfind
+
+
+Detects:
+
+Fileless malware
+
+RWE / RX memory regions
+
+Injected shellcode
+
+MZ headers in memory
+
+🧬 YARA Scanning
+windows.yarascan
+
+
+Used for:
+
+Known malware patterns
+
+Threat intelligence matching
+
+🧠 Advanced Memory Forensics
+Rootkit Detection
+
+Common Hooking Techniques:
+
+SSDT
+
+IRP
+
+IAT / EAT
+
+Inline hooks
+
+SSDT scan:
+
+windows.ssdt
+
+Kernel Drivers
+Plugin	Purpose
+modules	Loaded kernel modules
+driverscan	Hidden / unlinked drivers
+
+Commands:
+
+windows.modules
+windows.driverscan
+
+🧪 Practical Investigations
+🧾 Case 001 – BOB! THIS ISN’T A HORSE!
+
+Scenario: Banking trojan disguised as Adobe file
+Memory File: Investigation-1.vmem
+
+Findings
+Question	Answer
+OS Build Version	2600.xpsp.080413-2111
+Memory Acquisition Time	2012-07-22 02:45:08
+Suspicious Process	reader_sl.exe
+PID	1640
+Parent Process	explorer.exe
+Parent PID	1484
+User-Agent	Mozilla/5.0 (MSIE 7.0)
+Suspicious IP	41.168.5.140
+Chase Bank Domain Found	Yes
+
+📌 Conclusion: Banking trojan active in memory
+
+🧾 Case 002 – That Kind of Hurt My Feelings
+
+Scenario: Ransomware post-incident analysis
+Memory File: Investigation-2.raw
+
+Findings
+Question	Answer
+Suspicious Process	@WanaDecryptor@
+PID	740
+Binary Path	C:\Intel\ivecuqmanpnirkt615@WanaDecryptor@.exe
+
+Parent Process	tasksche.exe
+Parent PID	1940
+Malware Identified	WannaCry
+DLL for Socket	Ws2_32.dll
+Mutex	MsWinZonesCacheCounterMutexA
+Plugin to Find Files	windows.filescan
+
+📌 Conclusion: WannaCry ransomware confirmed
+
+📝 Analyst Notes
+
+Malware disk-এ না থাকলেও RAM-এ থাকতে পারে
+
+psscan > pslist for hidden processes
+
+malfind is critical for fileless malware
+
+Rootkits require kernel-level inspection
+
+Memory forensics is SOC & DFIR essential skill
+
+🏁 Key Takeaways (Day 8)
+
+✔ Volatility = industry standard memory forensics tool
+✔ RAM analysis reveals live attacker behavior
+✔ Fileless malware detection সম্ভব
+✔ Advanced threats disk tools এড়িয়ে যায়
