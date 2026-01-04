@@ -937,3 +937,291 @@ crontab	Scheduled persistence
 
 Linux Forensics relies heavily on log analysis, configuration files, and user artifacts rather than a centralized registry.
 By correlating data from system configuration files, persistence mechanisms, execution history, and logs, investigators can accurately reconstruct user activity and system behavior over time.
+
+Day 5
+🧪 Digital Forensics with Autopsy 
+📌 Overview
+
+Day 5 focuses on learning and applying Autopsy, an open-source digital forensics platform widely used in law enforcement, DFIR teams, and corporate investigations.
+This day covers workflow, data sources, ingest modules, user interface, visualization tools, reporting, and real-world data analysis using a mini investigation scenario.
+
+🧠 What is Autopsy?
+
+Autopsy is a powerful, GUI-based digital forensics platform built on The Sleuth Kit.
+
+Key Features
+
+Disk image & VM analysis
+
+Plug-in based architecture (Ingest Modules)
+
+Timeline & visualization tools
+
+Keyword search & artifact correlation
+
+Report generation (HTML/CSV)
+
+Used by:
+
+Law enforcement
+
+National security
+
+Corporate incident response teams
+
+🔁 Autopsy Workflow (Core Concept)
+
+Every Autopsy investigation follows this workflow:
+
+Create / Open Case
+
+Add Data Source
+
+Configure Ingest Modules
+
+Review Extracted Artifacts
+
+Generate Report
+
+🔑 Always review Data Source Summary first before deep analysis.
+
+📂 Case Management
+🔹 Case File Extension
+.aut
+
+Case Types
+
+Single-User (used in this room)
+
+Multi-User (server-based)
+
+💽 Data Sources in Autopsy
+Supported Disk Image Formats
+Type	Examples
+Raw Single	.img, .dd, .raw, .bin
+Raw Split	.001, .002, .aa, .ab
+EnCase	.e01, .e02, .e03
+Virtual Machines	.vmdk, .vhd
+
+📌 For split images, only the first file (e.g., .e01) is required.
+
+❓ Q&A
+
+What is the disk image name of the "e01" format?
+✅ Answer: EnCase
+
+⚙️ Ingest Modules
+
+Ingest Modules are Autopsy plug-ins that extract specific forensic artifacts.
+
+Examples
+
+Interesting Files Identifier
+
+Keyword Search
+
+Recent Activity
+
+Web Artifacts
+
+Deleted Files
+
+Execution Options
+
+During data source addition
+
+After data source is added (Right-click → Run Ingest Modules)
+
+📌 Results appear under the Results node in Tree Viewer.
+
+🖥️ User Interface – Part I
+5 Main UI Areas
+1️⃣ Tree Viewer
+
+Top-level nodes:
+
+Data Sources
+
+Views
+
+Results
+
+Tags
+
+Reports
+
+2️⃣ Result Viewer
+
+Tabs:
+
+Table
+
+Thumbnail
+
+Summary
+
+Allows file extraction and artifact review.
+
+3️⃣ Views
+
+Files categorized by:
+
+Extension
+
+MIME Type
+
+Deleted Files
+
+File Size
+
+🔥 MIME Type is more reliable than file extension.
+
+4️⃣ Contents Viewer
+
+Shows detailed file metadata.
+
+Columns:
+
+S (Score) → Notable / Suspicious
+
+C (Comment)
+
+O (Occurrence) (Central Repository)
+
+5️⃣ Status Area
+
+Ingest progress
+
+Alerts
+
+Cancel option
+
+❓ Q&A
+
+Number of Data Sources: 4
+
+Detected Removed Files: 10
+
+Interesting File Name: googledrivesync.exe
+
+🧾 User Interface – Part II (Summary & Reporting)
+Data Source Summary
+
+Provides high-level overview:
+
+OS version
+
+File types
+
+Deleted files
+
+User activity
+
+Interesting files
+
+Report Generation
+
+Supported formats:
+
+HTML
+
+CSV
+
+📌 Reports allow offline analysis without Autopsy GUI.
+
+❓ Q&A
+
+OS Version: Windows 7 Ultimate Service Pack 1
+
+Documents Percentage: 40.8%
+
+Interesting Files Identifier Job Number: 10
+
+🕵️ Task 7 – Data Analysis (Mini Scenario)
+Scenario
+
+An employee is suspected of leaking company data.
+Disk image metadata was analyzed using Autopsy.
+
+Key Findings
+Evidence	Finding
+Installed Program	Eraser (Anti-forensics tool)
+Password Hint	IAMAN
+Network Access	SECRET files from 10.11.11.128
+Web Searches	information leakage cases
+Timed Search	anti-forensic tools
+Suspicious Binary MD5	fe18b02e890f7a789c576be8abccdc99
+Sticky Note	Tomorrow...Everything will be OK...
+❓ Q&A (All Correct)
+
+Installed Program → Eraser
+
+Password Hint → IAMAN
+
+Network IP → 10.11.11.128
+
+Top Search Term → information leakage cases
+
+Timed Search → anti-forensic tools
+
+MD5 Hash → fe18b02e890f7a789c576be8abccdc99
+
+Sticky Note Message → Tomorrow...Everything will be OK...
+
+⏳ Visualization Tools – Timeline
+
+Timeline is the most powerful visualization tool in Autopsy.
+
+Components
+
+Filters
+
+Events
+
+File / Content details
+
+View Modes
+
+Counts
+
+Details
+
+List
+
+Supports:
+
+Clustering
+
+Pin / Unpin
+
+Hide / Unhide events
+
+❓ Q&A
+
+Events on 2015-01-12: 46
+
+Highest Activity Date: March 25, 2015
+
+🧠 Forensic Correlation Summary
+
+Strong indicators of insider data leakage:
+
+Anti-forensic tools installed
+
+Research on data leakage & anti-forensics
+
+Access to SECRET files over network
+
+Suspicious binaries
+
+Psychological stress indicators
+
+🔴 Confidence Level: HIGH
+
+📝 One-Line GitHub Summary
+
+Day 5 focused on mastering Autopsy for digital forensics, covering case workflow, data sources, ingest modules, UI navigation, visualization through timelines, reporting, and a real-world insider data leakage investigation.
+
+🏁 Day 5 Status
+
+✅ COMPLETED – Autopsy (TryHackMe)
