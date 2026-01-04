@@ -1624,7 +1624,8 @@ Rapid triage needed
 
 👉 Collect fast → Analyze smart
 
-Day 8 – Volatility (Memory Forensics)
+Day 8 –
+Volatility (Memory Forensics)
 
 Platform: TryHackMe
 Category: Memory Forensics | Malware Analysis | DFIR
