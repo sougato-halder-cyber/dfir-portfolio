@@ -1225,3 +1225,175 @@ Day 5 focused on mastering Autopsy for digital forensics, covering case workflow
 🏁 Day 5 Status
 
 ✅ COMPLETED – Autopsy (TryHackMe)
+
+ Day 6
+Redline 
+Task 6: IOC Search Collector Analysis (Threat Hunting)
+📌 Scenario Overview
+
+Organization: Osinski Inc.
+Incident Type: Suspected intrusion
+Attack Technique: Lateral Movement – Pass-the-Hash (PtH)
+
+The security team suspects:
+
+An attacker planted a malicious file
+
+Tool used for lateral movement
+
+File was masqueraded
+
+Only partial indicators were initially known
+
+🎯 Goal:
+Identify the planted malicious file using IOC-based threat hunting with Redline.
+
+🧠 Initial Intelligence (Known Artifacts)
+
+Only the following IOCs were provided:
+
+File Strings
+20210513173819Z0w0=
+<?<L<T<g=
+
+File Size
+834936 bytes
+
+
+📌 No filename
+📌 No hash
+📌 No path
+
+➡️ Classic threat hunting scenario with limited intel.
+
+🛠️ Tools & Data Used
+
+FireEye Redline
+
+IOC Search Collector
+
+Existing analysis session
+
+📂 Session Location:
+
+C:\Users\Administrator\Documents\Analysis\Sessions\AnalysisSession1
+
+🔎 Investigation Approach (How the Hunt Was Done)
+
+Created IOC using:
+
+File strings
+
+File size
+
+Loaded existing .mans session in Redline
+
+Executed IOC Search analysis
+
+Filtered files matching all artifacts
+
+Validated:
+
+File path
+
+Owner
+
+Subsystem
+
+Device path
+
+Hash
+
+Correlated hash with known attacker tools
+
+🚨 Findings (Malicious File Identified)
+✅ Full File Path (Including Filename)
+C:\Users\Administrator\AppData\Local\Temp\8eJv8w2id6IqN85dfC.exe
+
+
+📌 Temp directory → common attacker drop location
+📌 Random filename → masquerading technique
+
+✅ Directory Path Only
+C:\Users\Administrator\AppData\Local\Temp\
+
+✅ File Owner
+BUILTIN\Administrators
+
+
+⚠️ Indicates execution with administrative privileges
+
+✅ Subsystem
+Windows_CUI
+
+
+📌 Command-line executable
+📌 Common for lateral movement tools
+
+✅ Device Path
+\Device\HarddiskVolume2
+
+✅ SHA-256 Hash
+57492d33b7c0755bb411b22d2dfdfdf088cbbfcd010e30dd8d425d5fe66adff4
+
+🎭 Masquerading Detection
+
+Using hash correlation and known tool signatures:
+
+🔴 Real Filename Identified
+PsExec.exe
+
+🧠 Why This Matters (Analyst Insight)
+
+PsExec.exe is a legitimate Sysinternals tool
+
+Frequently abused by attackers for:
+
+Lateral movement
+
+Pass-the-Hash attacks
+
+Remote command execution
+
+Masquerading helps evade:
+
+AV detection
+
+Casual inspection
+
+📌 Context + behavior = malicious intent confirmed
+
+❓ Questions & Answers
+Question	Answer
+Full file path	C:\Users\Administrator\AppData\Local\Temp\8eJv8w2id6IqN85dfC.exe
+Directory path	C:\Users\Administrator\AppData\Local\Temp\
+File owner	BUILTIN\Administrators
+Subsystem	Windows_CUI
+Device path	\Device\HarddiskVolume2
+SHA-256 hash	57492d33b7c0755bb411b22d2dfdfdf088cbbfcd010e30dd8d425d5fe66adff4
+Real filename	PsExec.exe
+🧠 Key Takeaways (Day 6)
+
+IOC hunting works even with partial indicators
+
+File strings + file size are powerful together
+
+Temp directories are attacker favorites
+
+Masquerading is extremely common
+
+PsExec is dual-use → intent matters
+
+Contextual analysis is critical in DFIR
+
+📝 GitHub Summary (Day 6)
+### Day 6 – Redline IOC Search Collector Analysis
+
+In this task, IOC-based threat hunting was conducted to identify a malicious executable used for lateral movement at Osinski Inc. Using limited indicators such as file strings and file size, a suspicious executable was discovered in the Temp directory. Further analysis revealed the file was masquerading under a random name but matched the SHA-256 hash of PsExec.exe, a tool commonly abused in Pass-the-Hash attacks. This task highlights the effectiveness of IOC-driven investigations and contextual analysis in incident response.
+
+✅ Day 6 Status
+
+✔ IOC-based Threat Hunting
+✔ Masquerading Detection
+✔ Lateral Movement Analysis
+✔ Pass-the-Hash Context
