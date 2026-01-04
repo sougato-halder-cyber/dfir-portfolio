@@ -1397,3 +1397,229 @@ In this task, IOC-based threat hunting was conducted to identify a malicious exe
 ✔ Masquerading Detection
 ✔ Lateral Movement Analysis
 ✔ Pass-the-Hash Context
+
+Day 7 
+KAPE (Kroll Artifact Parser and Extractor)
+
+Platform: TryHackMe
+Category: Windows Forensics | DFIR | Incident Response
+Tool: KAPE
+Author: Eric Zimmerman (Kroll)
+
+🔍 Day 7 Overview
+
+আগের Windows Forensics rooms (WF1, WF2)-এ আমরা manualভাবে artifacts analyze করেছি।
+কিন্তু বাস্তব incident response-এ সময় সবচেয়ে বড় factor।
+
+👉 KAPE এই সমস্যা solve করে by:
+
+দ্রুত forensic artifacts collect করা
+
+automated parsing করা
+
+minimal user interaction-এ triage output দেওয়া
+
+🎯 Learning Objectives (Day 7)
+
+KAPE কী এবং কেন ব্যবহার করা হয়
+
+Targets vs Modules বোঝা
+
+Compound Targets & Modules
+
+KAPE GUI ব্যবহার
+
+KAPE CLI ও Batch Mode
+
+Policy Violation Investigation (Hands-on)
+
+🧠 What is KAPE?
+
+KAPE (Kroll Artifact Parser and Extractor) একটি portable DFIR triage tool, যা:
+
+Live system / mounted image থেকে artifacts collect করে
+
+OS-locked files bypass করে (raw disk read)
+
+Original timestamps ও metadata preserve করে
+
+Eric Zimmerman forensic tools দিয়ে artifacts parse করে
+
+⚡ Goal: Speed + Accuracy in Incident Response
+
+🧩 Core Architecture
+🔹 Targets
+
+Targets define করে → কি collect করা হবে
+
+Extension: .tkape
+
+Examples:
+
+Prefetch
+
+Registry Hives
+
+Event Logs
+
+USB Artifacts
+
+Browser Artifacts
+
+🔸 Compound Targets
+
+একাধিক targets একসাথে collect করার জন্য
+
+Examples:
+
+KapeTriage
+
+!BasicCollection
+
+!SANS_Triage
+
+📌 Used for rapid triage
+
+🔹 Modules
+
+Modules define করে → collected data কীভাবে parse হবে
+
+Extension: .mkape
+
+Output: CSV / TXT / JSON
+
+Mostly Eric Zimmerman tools
+
+Examples:
+
+PECmd → Prefetch
+
+LECmd → LNK files
+
+EvtxECmd → Event logs
+
+RECmd → Registry
+
+📁 bin directory
+
+External executables রাখা হয় (EZ tools)
+
+🖥️ KAPE GUI (gkape.exe)
+Important GUI Options
+
+✔️ Use Target Options
+
+✔️ Target Source → C:\
+
+✔️ Target Destination → Output folder
+
+✔️ %d → Append Date & Time
+
+✔️ %m → Append Machine Name
+
+✔️ Use Module Options
+
+Lab Configuration
+
+Target: KapeTriage
+
+Module: !EZParser
+
+⌨️ KAPE CLI Usage
+Basic Command
+kape.exe --tsource C: --target KapeTriage --tdest C:\Users\thm-4n6\Desktop\Target --mdest C:\Users\thm-4n6\Desktop\Module --module !EZParser
+
+Useful Variables
+Variable	Description
+%d	Timestamp
+%m	Machine Name
+%s	System Drive
+📦 Batch Mode (_kape.cli)
+
+Used when:
+
+Non-technical user runs KAPE
+
+SOC automation
+
+IR playbooks
+
+Example:
+
+--tsource C: --target KapeTriage --tdest C:\Target --mdest C:\Module --module !EZParser
+
+🕵️ Hands-on Investigation (Acceptable Use Policy Violation)
+Findings
+
+USB mass storage connected
+
+Software installed from Network drive
+
+Browser search artifacts
+
+Network profiles recorded
+
+KAPE copied from removable media
+
+❓ Questions & Answers
+🔌 USB Devices
+
+Q: Other USB Serial Number?
+✅ 1C6F654E59A3B0C179D366AE
+
+📦 Software Installation
+
+Q: Network drive path used for installs?
+✅ Z:\Setups
+
+▶️ Execution Evidence
+
+Q: CHROMESETUP.EXE execution time?
+✅ 11/25/2021 03:33
+
+🔍 User Activity
+
+Q: Search query executed?
+✅ RunWallpaperSetup.cmd
+
+🌐 Network Evidence
+
+Q: Network 3 first connection time?
+✅ 11/30/2021 15:44
+
+💾 Removable Media
+
+Q: Drive letter KAPE copied from?
+➡️ Identified via USB + LNK + ShellBags artifacts
+
+🧠 Analyst Notes (Exam + Real World)
+
+KAPE = Collection + Parsing, not full analysis
+
+Always preserve timestamps
+
+Compound Targets save huge time
+
+Ideal combo:
+
+KAPE + Autopsy
+
+KAPE + Redline
+
+USB + Network installs = policy breach indicator
+
+🏁 Day 7 Takeaway
+
+KAPE is a must-know DFIR tool
+
+Use KAPE when:
+
+Ransomware suspected
+
+Insider threat
+
+USB misuse
+
+Rapid triage needed
+
+👉 Collect fast → Analyze smart
