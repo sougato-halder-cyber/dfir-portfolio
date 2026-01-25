@@ -1,1 +1,161 @@
+Deloitte Cybersecurity Job Simulation::
+ Task 1
+📌 Task Title
 
+Cyber Security – Investigating a Potential Breach
+
+📖 Overview
+
+This task simulates the role of a Cyber Security Analyst at Deloitte, where the objective was to investigate a suspected security breach involving Daikibo’s manufacturing status dashboard.
+
+The investigation focused on analyzing web request logs to determine:
+
+Whether an attacker could access the dashboard directly from the internet
+
+Whether any suspicious or automated activity was present
+
+Identifying the user ID most likely involved in abnormal behavior
+
+🎯 Objectives
+
+Determine if the alleged breach could originate from the internet without VPN access
+
+Inspect web_requests.log for suspicious patterns
+
+Identify abnormal request behavior
+
+Pinpoint the most suspicious authorized user ID
+
+🛠️ Tools & Resources Used
+
+web_requests.log (internal dashboard access logs)
+
+Deloitte-provided “How to Read the Logs” PDF
+
+Manual log analysis using cybersecurity fundamentals
+
+🧠 How I Completed the Task (Step-by-Step)
+1️⃣ Understanding the Environment
+
+Confirmed that Daikibo’s dashboard is hosted on an internal intranet
+
+Noted that all IP addresses were from the 192.168.x.x private range
+
+Understood that access requires:
+
+Internal network / VPN
+
+Valid authentication
+
+2️⃣ Identifying Normal User Behavior
+
+Using the reference PDF, I identified the expected flow:
+
+401 Unauthorized
+
+/login page load
+
+POST /login
+
+Dashboard resources (CSS, JS)
+
+Limited, irregular API requests
+
+This represents human-driven interaction.
+
+3️⃣ Spotting Suspicious Activity
+
+I looked for:
+
+Long sequences of API requests
+
+Requests made at regular time intervals
+
+API calls without dashboard refresh
+
+Repeated access to multiple factories and machines
+
+➡️ This pattern suggests automation or scripting, not normal user behavior.
+
+4️⃣ Identifying the Suspicious User
+
+One user ID stood out due to:
+
+Activity spanning multiple days
+
+High-frequency API requests
+
+Consistent timing patterns
+
+Broad access across factories
+
+🚨 Findings
+❌ Internet-Based Attack
+
+The breach could NOT have happened directly from the internet.
+
+Reason:
+
+Dashboard is not internet-facing
+
+Only accessible from Daikibo’s internal network
+
+Credentials alone are insufficient without network access
+
+⚠️ Suspicious User Identified
+
+User ID:
+
+dBCm2JjBU815PB8zPDvKqv
+
+
+Why this user is suspicious:
+
+Appears across multiple sessions and dates
+
+Shows automated-like API polling behavior
+
+Requests machine data more frequently than normal users
+
+Activity does not align with expected dashboard usage
+
+📝 Quiz Answers
+Q1:
+
+Is there a way for a hacker to access Daikibo's manufacturing status dashboard directly from the internet?
+
+✅ Answer:
+
+No, the attacker has no direct access to the status dashboard.
+
+Q2:
+
+Looking at the web_requests.log, what is the user ID with the most suspicious activity?
+
+✅ Answer:
+
+dBCm2JjBU815PB8zPDvKqv
+
+🧩 Key Skills Demonstrated
+
+Log analysis
+
+Threat detection
+
+Identifying automated behavior
+
+Understanding internal network security
+
+Cybersecurity investigation mindset
+
+📈 Outcome
+
+Successfully identified abnormal activity using log analysis
+
+Determined attack constraints based on network architecture
+
+Demonstrated real-world cybersecurity investigation skills aligned with Deloitte workflows
+
+🔗 Platform
+
+Deloitte Cybersecurity Job Simulation – Forage
