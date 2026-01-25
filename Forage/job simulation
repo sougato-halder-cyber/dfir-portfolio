@@ -26,6 +26,8 @@ Identify abnormal request behavior
 
 Pinpoint the most suspicious authorized user ID
 
+
+
 🛠️ Tools & Resources Used
 
 web_requests.log (internal dashboard access logs)
@@ -159,3 +161,255 @@ Demonstrated real-world cybersecurity investigation skills aligned with Deloitte
 🔗 Platform
 
 Deloitte Cybersecurity Job Simulation – Forage
+
+Datacom Cybersecurity Job Simulation::
+Task 1 & Task 2 – Security Analysis & Risk Assessment
+📌 Overview
+This repository documents my completion of the Datacom Cybersecurity Job Simulation, where I worked through realistic cybersecurity scenarios focused on incident analysis, business impact assessment, and risk-based security decision making.
+
+The simulation is divided into two key tasks:
+
+Task 1: Incident investigation and breach impact analysis
+
+Task 2: Organisational cybersecurity risk assessment
+
+🎯 Learning Objectives
+
+Through these tasks, I developed practical experience in:
+
+Analysing real-world cyber incidents
+
+Identifying vulnerabilities and attack vectors
+
+Assessing legal, financial, and reputational impact
+
+Performing structured cybersecurity risk assessments
+
+Communicating findings clearly in a professional format
+
+🔴 Task 1: Introduction to Cyber Security
+Incident Investigation & Impact Assessment
+🏢 Client Background
+
+Orion Health Services
+
+Mid-sized healthcare technology provider
+
+~250 employees
+
+Operates across Australia and New Zealand
+
+Manages sensitive patient and employee data
+
+Provides cloud-based software to healthcare clinics
+
+🚨 Incident Summary
+
+Incident Type: Ransomware attack
+
+Detection:
+
+Unusual outbound traffic from an internal server
+
+Employees locked out of systems
+
+Ransom note discovered on a shared drive
+
+🔓 Attack Analysis
+Initial Entry Point
+
+Phishing email sent to a finance team member
+
+Contained a malicious Excel attachment
+
+Likely relied on macro execution or embedded malware
+
+Attack Progression
+
+Phishing email opened
+
+Malware executed on endpoint
+
+Credential harvesting using Mimikatz
+
+Lateral movement across systems
+
+Ransomware deployed and files encrypted
+
+📂 Compromised Data
+
+Employee payroll records
+
+Patient appointment schedules
+
+Internal system credentials
+
+💻 Systems Affected
+
+File server
+
+HR systems
+
+Finance systems
+
+Backup server (partially encrypted)
+
+🚩 Indicators of Compromise (IOCs)
+
+Suspicious login from an overseas IP address
+
+Use of Mimikatz credential-dumping tool
+
+Files encrypted with .orionlock extension
+
+📉 Business Impact
+Legal & Regulatory
+
+Potential healthcare data protection violations
+
+Mandatory breach notification obligations
+
+Financial
+
+Operational downtime
+
+Incident response and recovery costs
+
+Potential ransom exposure
+
+Reputational
+
+Loss of trust from healthcare clients
+
+Damage to brand credibility
+
+🛡️ Key Recommendations
+
+Improve phishing detection and email security
+
+Enforce Multi-Factor Authentication (MFA)
+
+Deploy Endpoint Detection & Response (EDR)
+
+Isolate and protect backup infrastructure
+
+Conduct regular security awareness training
+
+🟠 Task 2: Cybersecurity Risk Assessment
+RetailNova Pty Ltd
+🏢 Client Overview
+
+RetailNova Pty Ltd
+
+Headquartered in Melbourne, Australia
+
+~1,200 employees
+
+~$450 million annual revenue
+
+85 physical stores + e-commerce platform
+
+Uses AWS, Salesforce (CRM), SAP (ERP), cloud POS systems
+
+RetailNova handles large volumes of customer PII, loyalty data, and tokenised payment data, making cybersecurity a critical business requirement.
+
+🎯 Task Objective
+
+To conduct a structured cybersecurity risk assessment by:
+
+Identifying critical assets
+
+Analysing threats and vulnerabilities
+
+Assessing likelihood and impact
+
+Prioritising risks
+
+Recommending mitigations
+
+🛠️ Risk Assessment Methodology
+
+Asset-based risk identification
+
+Threat and vulnerability analysis
+
+Likelihood and consequence scoring
+
+Inherent vs residual risk evaluation
+
+Risk prioritisation and ownership
+
+🚨 Key Risks Identified
+🔴 Risk 1: Phishing-Based Credential Compromise
+
+Assets at Risk: Customer data, CRM, internal systems
+
+Inherent Risk: HIGH
+
+Residual Risk: HIGH
+
+Cause: Human error and frequent phishing attempts
+
+🟠 Risk 2: Third-Party Vendor Data Exposure
+
+Assets at Risk: Customer email and loyalty data
+
+Inherent Risk: HIGH
+
+Residual Risk: MEDIUM
+
+Cause: Limited visibility into vendor security controls
+
+🟠 Risk 3: Malware Introduction via BYOD Devices
+
+Assets at Risk: AWS systems, POS infrastructure
+
+Inherent Risk: HIGH
+
+Residual Risk: MEDIUM
+
+Cause: Inconsistent endpoint security on personal devices
+
+🛡️ Recommended Mitigations
+
+Mandatory Multi-Factor Authentication (MFA)
+
+Endpoint Detection & Response (EDR)
+
+Regular phishing simulations
+
+Strengthened third-party risk management
+
+BYOD device compliance enforcement
+
+Network segmentation
+
+🧠 Skills Demonstrated
+
+Cyber incident analysis
+
+Ransomware attack understanding
+
+Cybersecurity risk assessment
+
+Threat and vulnerability identification
+
+Business impact analysis
+
+Professional cybersecurity documentation
+
+📈 Outcome
+
+This simulation strengthened my ability to:
+
+Analyse real-world cybersecurity incidents
+
+Translate technical findings into business impact
+
+Prioritise cybersecurity risks using structured frameworks
+
+Communicate security findings clearly for stakeholders
+
+🔗 Platform
+
+Datacom – Cybersecurity Job Simulation (Forage)
