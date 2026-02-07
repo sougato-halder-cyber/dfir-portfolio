@@ -1,1 +1,418 @@
+Day 1
+Introduction to Offensive Security
 
+(TryHackMe – Fundamentals)
+
+“To outsmart a hacker, you need to think like one.”
+
+This repository documents the foundational concepts of Offensive Security, based on the TryHackMe introductory lesson. It explains what offensive security is, why it matters, and how ethical hackers approach systems from an attacker’s mindset — legally and responsibly.
+
+🔍 What is Offensive Security?
+
+Offensive Security is the practice of actively testing systems by simulating real-world attacks to identify vulnerabilities before malicious attackers do.
+
+It focuses on:
+
+Breaking into systems with permission
+
+Exploiting software bugs and logic flaws
+
+Finding loopholes in applications, networks, and configurations
+
+Helping organisations strengthen their defences
+
+🎯 Core Idea
+
+To defend effectively, you must understand how attacks work.
+
+Offensive security professionals think like hackers, but:
+
+Operate in legal, controlled environments
+
+Follow defined scopes and rules
+
+Aim to improve security, not cause damage
+
+🧠 Offensive vs Defensive Security
+Aspect	Offensive Security	Defensive Security
+Mindset	Attacker	Defender
+Goal	Find and exploit weaknesses	Detect, prevent, respond
+Activities	Pentesting, Red Teaming, Exploitation	Monitoring, Blue Team, Incident Response
+Question Asked	“How can I break this?”	“How do I stop attacks?”
+🧪 Learning Objective of This Task
+
+Understand the attacker mindset
+
+Learn what ethical hackers do
+
+Prepare for hands-on hacking in a safe lab environment
+
+Build a strong foundation for penetration testing
+
+📝 Task Question & Answer
+
+Question:
+Which option represents the process where you simulate a hacker’s actions to find vulnerabilities in a system?
+
+Correct Answer:
+
+Offensive Security
+
+🚀 Why This Matters
+
+Most real-world breaches happen due to known but untested weaknesses
+
+Offensive security helps:
+
+Prevent data breaches
+
+Reduce attack surface
+
+Validate security controls
+
+It is a core skill for:
+
+Penetration Testers
+
+Red Teamers
+
+Bug Bounty Hunters
+
+Security Engineers
+
+🧩 Key Takeaways
+
+✔️ Offensive Security = proactive security testing
+
+✔️ Legal + permission-based hacking
+
+✔️ Think like an attacker to defend better
+
+✔️ Foundation for all advanced hacking skills
+
+📚 What Comes Next?
+
+After this foundation, learning typically progresses to:
+
+Web application hacking
+
+Linux & Windows exploitation
+
+Privilege escalation
+
+Active Directory attacks
+
+Red Team operations
+
+🏁 Conclusion
+
+Offensive Security is not about breaking rules —
+it’s about breaking systems safely so real attackers can’t.
+
+Learn the attacker’s mindset today to secure systems tomorrow.
+
+Day 2 
+Task 2
+Hacking Your First Machine – FakeBank
+
+(TryHackMe | Offensive Security Fundamentals)
+
+This section documents the first hands-on hacking exercise using a safe, legal virtual machine provided by TryHackMe. The goal is to introduce how attackers discover hidden functionality in web applications and why this is dangerous if access controls are missing.
+
+🖥️ Virtual Lab Overview
+
+TryHackMe uses Virtual Machines (VMs) to simulate real-world systems in a controlled environment.
+
+For this task:
+
+Target Application: FakeBank (a simulated banking website)
+
+Attacker Tools: Terminal + Gobuster
+
+Objective: Discover hidden admin functionality and exploit it
+
+🎯 Learning Objectives
+
+Understand how attackers discover hidden web pages
+
+Learn basic directory brute-forcing
+
+Experience a realistic web vulnerability
+
+Build attacker mindset safely
+
+🧠 Scenario Explanation
+
+Many real-world applications expose hidden admin or internal pages that:
+
+Are not linked from the main website
+
+Rely on “security through obscurity”
+
+Lack authentication or authorization checks
+
+Attackers commonly scan websites to discover these pages.
+
+🔎 Tool Used: Gobuster
+
+Gobuster is a command-line tool used to:
+
+Brute-force directories and files
+
+Discover hidden endpoints
+
+Enumerate attack surface of web apps
+
+🧪 Step-by-Step Exploitation
+🔹 Step 1: Open Terminal
+
+Use the terminal inside the AttackBox VM to run commands.
+
+🔹 Step 2: Brute-force Website Pages
+
+Command used:
+
+gobuster -u http://fakebank.thm -w wordlist.txt dir
+
+
+Command Breakdown:
+
+-u → Target URL
+
+-w → Wordlist containing possible directory names
+
+dir → Directory brute-forcing mode
+
+🔹 Step 3: Analyse Output
+
+Gobuster discovered:
+
+/images        (Status: 301)
+/bank-transfer (Status: 200)
+
+
+📌 Status 200 means the page exists and is accessible.
+
+🔹 Step 4: Exploit Hidden Functionality
+
+Navigating to:
+
+http://fakebank.thm/bank-transfer
+
+
+Reveals a bank transfer page that:
+
+Has no authentication
+
+Allows money transfers between accounts
+
+Represents a critical access control failure
+
+💣 Exploitation Goal
+
+Transfer:
+
+$2000
+
+From account 2276
+
+To attacker account 8881
+
+After completing the transfer, the balance updates successfully.
+
+✅ Proof of Successful Exploitation
+
+Above the account balance, a confirmation message appears.
+
+🏁 Flag:
+BANK-HACKED
+
+🛑 Why This Is Dangerous in the Real World
+
+This vulnerability demonstrates:
+
+Broken access control
+
+Missing authentication
+
+Sensitive functionality exposed publicly
+
+In a real bank:
+
+This would result in financial theft
+
+Massive legal and reputational damage
+
+Regulatory penalties
+
+🛡️ Defensive Takeaways
+
+To prevent this type of attack:
+
+Enforce authentication on all sensitive endpoints
+
+Do not rely on hidden URLs for security
+
+Apply proper role-based access control (RBAC)
+
+Regularly test applications using tools like Gobuster
+
+🧠 Key Takeaways
+
+✔️ Hidden pages ≠ secure pages
+
+✔️ Attackers enumerate first, exploit second
+
+✔️ Simple tools can lead to serious breaches
+
+✔️ Offensive security finds these issues before criminals do
+
+📌 Final Answer Summary
+
+Question:
+What message appears after successfully hacking the bank?
+
+Answer:
+
+BANK-HACKED
+ Day 3
+Task 3
+Careers in Cyber Security
+
+(TryHackMe | Offensive Security Fundamentals – Task 3)
+
+This section focuses on career paths in cyber security and provides guidance on how beginners can realistically enter the industry through consistent learning and hands-on practice.
+
+🚀 How Can I Start Learning Cyber Security?
+
+Many beginners wonder:
+
+“How do people actually become hackers or security professionals?”
+
+The answer is simple but powerful:
+
+✅ Break it down
+
+Cyber security is a broad field. You don’t learn everything at once.
+
+✅ Pick an area you enjoy
+
+Examples:
+
+Offensive Security (hacking, pentesting)
+
+Defensive Security (SOC, blue team)
+
+Engineering & architecture
+
+Cloud & application security
+
+✅ Practice regularly
+
+Hands-on labs are non-negotiable. Reading alone is not enough.
+
+💡 Learn a little every day on TryHackMe — consistency beats intensity.
+
+🌱 Real People, Real Career Changes
+
+TryHackMe highlights real success stories to show that background does not matter:
+
+Paul → Construction worker → Security Engineer
+
+Kassandra → Music teacher → Cyber security professional
+
+Brandon → Student → First cyber job using TryHackMe
+
+📌 These examples prove:
+
+You don’t need a CS degree to start
+
+Career switches are possible
+
+Skills + practice matter more than titles
+
+🧑‍💻 Common Offensive Security Roles
+
+Here are some popular roles related to offensive security:
+
+🔴 Penetration Tester
+
+Tests systems, networks, and applications
+
+Finds exploitable vulnerabilities
+
+Writes reports to help organisations fix issues
+
+🔴 Red Teamer
+
+Simulates real attackers
+
+Tests detection and response capabilities
+
+Focuses on stealth, persistence, and realism
+
+🔵 Security Engineer
+
+Designs and maintains security controls
+
+Prevents attacks rather than simulating them
+
+Works closely with infrastructure and systems
+
+🧠 Key Career Advice (Exam + Interview Friendly)
+
+✔️ Cyber security is a skill-based field
+
+✔️ Hands-on practice is essential
+
+✔️ Daily learning compounds over time
+
+✔️ TryHackMe provides job-relevant experience
+
+✔️ Offensive & defensive roles often overlap in skills
+
+📌 Task Status
+
+Instruction:
+Read the content and continue to the next room.
+
+Answer:
+
+No answer needed
+
+⭐ Room Recommendation Rating
+
+Question:
+How likely are you to recommend this room to others?
+
+👉 (User-selected rating)
+
+10 / 10
+
+
+(Beginner-friendly, motivating, and practical)
+
+🏁 Conclusion
+
+This task reinforces an important message:
+
+Cyber security is achievable if you stay consistent.
+
+Whether your goal is:
+
+Penetration Tester
+
+Red Teamer
+
+Security Engineer
+
+The journey starts with:
+
+Curiosity
+
+Practice
+
+Discipline
+
+Day 4
+task 4
