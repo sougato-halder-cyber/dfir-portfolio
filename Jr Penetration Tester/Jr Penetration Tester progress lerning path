@@ -416,3 +416,1179 @@ Discipline
 
 Day 4
 task 4
+
+Defensive Security Intro
+
+(TryHackMe – Blue Team Fundamentals)
+
+🔐 What is Defensive Security?
+
+Defensive Security focuses on protecting systems, networks, and data from cyber attacks.
+এটা মূলত দুইটা জিনিসে কাজ করে:
+
+Preventing intrusions (attack যেন ঢুকতেই না পারে)
+
+Detecting & responding to intrusions (attack হলে দ্রুত ধরা ও ঠিক করা)
+
+👉 Defensive Security-তে কাজ করে Blue Team।
+
+🧩 Key Responsibilities of Defensive Security
+
+User Cyber Security Awareness
+→ Users-দের phishing, malware, password hygiene ইত্যাদি শেখানো
+
+Asset Management
+→ কোন system, server, device protect করতে হবে সেটা জানা
+
+Patching & Updates
+→ Known vulnerabilities fix করা
+
+Preventive Security Controls
+
+Firewall
+
+Intrusion Prevention System (IPS)
+
+Logging & Monitoring
+→ Suspicious activity detect করা (unknown device, unusual login)
+
+🛡️ Major Areas of Defensive Security
+🏢 Security Operations Center (SOC)
+
+SOC হলো cyber security professionals-এর একটি টিম যারা 24/7 monitor করে:
+
+Network traffic
+
+Systems & servers
+
+Security alerts
+
+🎯 What SOC Monitors
+
+Vulnerabilities – known weaknesses
+
+Policy Violations – company rules ভাঙা
+
+Unauthorized Activity – stolen credentials ব্যবহার
+
+Network Intrusions – malware, exploits, phishing click
+
+🧠 Threat Intelligence
+
+Threat Intelligence = knowing your enemy
+
+🔍 What it Does
+
+Attacker কে identify করে
+
+Their Tactics, Techniques, Procedures (TTPs) বোঝে
+
+Future attack predict করে
+
+🔄 Threat Intelligence Lifecycle
+
+Data Collection – logs, forums, OSINT
+
+Processing – usable format
+
+Analysis – attacker motive + method
+
+Action – defence & mitigation
+
+👉 Goal: Threat-informed defence
+
+🔎 Digital Forensics & Incident Response (DFIR)
+🧪 Digital Forensics
+
+Attack হওয়ার পরে evidence analyze করা।
+
+🔍 Investigation Areas
+
+File System – deleted / hidden files
+
+Memory (RAM) – fileless malware
+
+System Logs – login, process, errors
+
+Network Logs – packet & traffic evidence
+
+🚨 Incident Response (IR)
+
+Incident =
+
+Cyber attack
+
+Data breach
+
+Misconfiguration
+
+Policy violation
+
+🧭 Incident Response Phases
+
+Preparation – tools, trained team
+
+Detection & Analysis – incident identify
+
+Containment, Eradication & Recovery
+
+Stop spread
+
+Remove threat
+
+Restore system
+
+Post-Incident Activity
+
+Report
+
+Lessons learned
+
+🦠 Malware Analysis
+
+Malware = malicious software
+
+🧨 Common Malware Types
+
+Virus – spreads by infecting files
+
+Trojan – looks legit, acts malicious
+
+Ransomware – encrypts files, demands money
+
+🔬 Malware Analysis Techniques
+
+Static Analysis – without running malware
+
+Dynamic Analysis – run in sandbox & observe
+
+🧪 Practical: SIEM Simulation
+📊 Scenario
+
+You are a SOC Analyst in a Bank
+
+Using SIEM (Security Information & Event Management)
+
+🛠️ What SIEM Does
+
+Collects logs
+
+Correlates events
+
+Generates alerts
+
+⚠️ Not all alerts = attack
+Analyst must investigate & decide
+
+🏁 Flag Found
+THM{THREAT-BLOCKED}
+
+✅ Task Answers Summary
+Question	Answer
+Defensive security team	Blue Team
+Network monitoring team	Security Operations Center (SOC)
+DFIR full form	Digital Forensics and Incident Response
+Malware demanding money	Ransomware
+SIEM flag	THM{THREAT-BLOCKED}
+🧠 Final Takeaways
+
+Defensive Security = Protection + Detection + Response
+
+SOC = real-time monitoring & alert handling
+
+DFIR = investigation & recovery
+
+Malware Analysis = understanding attacker tools
+
+Logging & visibility = everything
+
+📁 Suggested GitHub Structure
+Cyber-Security-101/
+└── Defensive-Security-Intro.md
+
+Day 5
+Cyber Security Careers Overview
+
+(TryHackMe – Careers in Cyber Security)
+
+🌐 Introduction
+
+Cyber security careers are highly in demand, well-paid, and exciting.
+এই ফিল্ডে কাজ মানে শুধু “hacking” না—বরং systems protect করা, attacks detect করা, আর incidents investigate করা।
+
+🔥 Why Choose a Career in Cyber Security?
+
+💰 High Pay – strong starting salaries
+
+⚡ Exciting Work – ethical hacking & cyber defence
+
+📈 Huge Demand – 3.5+ million unfilled cyber roles globally
+
+এই room-এর goal হলো তোমাকে বিভিন্ন cyber roles সম্পর্কে clear idea দেওয়া এবং কোন learning path ধরলে ভালো হবে সেটা দেখানো।
+
+🧑‍💻 Core Cyber Security Roles
+🛡️ Security Analyst
+
+Role: Organisation-এর data & systems secure রাখা
+
+🔍 What They Do
+
+Security Analysts network, systems, এবং policies analyse করে vulnerabilities খুঁজে বের করে। তারা engineers ও management-এর সাথে কাজ করে preventive controls বানাতে সাহায্য করে।
+
+🧾 Responsibilities
+
+Organisation-wide security posture analyse করা
+
+Security incidents ও risks নিয়ে reports বানানো
+
+New attack trends research করে security plans develop করা
+
+🎓 Learning Paths
+
+Pre Security
+
+Cyber Security 101
+
+SOC Level 1
+
+⚙️ Security Engineer
+
+Role: Security systems design, deploy, maintain করা
+
+🔍 What They Do
+
+Security Engineers technical controls বানায়—firewalls, IDS/IPS, endpoint security, cloud security ইত্যাদি।
+
+🧾 Responsibilities
+
+Security controls test & implement করা
+
+Networks monitor করে vulnerabilities fix করা
+
+Best-fit security tools deploy করা
+
+🎓 Learning Paths
+
+SOC Level 1
+
+JR Penetration Tester
+
+Offensive Pentesting
+
+🚨 Incident Responder
+
+Role: Live attacks handle করা (real-time response)
+
+🔍 What They Do
+
+Incident Responders attacks চলাকালীন detect, contain, eradicate ও recover করে।
+এই role-টা অনেক pressure-heavy।
+
+🧾 Responsibilities
+
+Incident Response Plan তৈরি ও maintain করা
+
+Active attacks contain ও mitigate করা
+
+Post-incident reports & lessons learned
+
+📊 Key Metrics
+
+MTTD – Mean Time To Detect
+
+MTTA – Mean Time To Acknowledge
+
+MTTR – Mean Time To Recover
+
+🎓 Learning Paths
+
+SOC Level 1
+
+🔎 Digital Forensics Examiner
+
+Role: Digital evidence analyse করা
+
+🔍 What They Do
+
+এই role অনেকটা detective-এর মতো।
+Law enforcement বা corporate environment-এ evidence collect ও analyse করা হয়।
+
+🧾 Responsibilities
+
+Legal process মেনে digital evidence collect করা
+
+Disk, memory, logs analyse করা
+
+Findings document ও report করা
+
+🦠 Malware Analyst
+
+Role: Malware reverse-engineer করা
+
+🔍 What They Do
+
+Malware Analysts malicious programs analyse করে বুঝে নেয়:
+
+কী করে
+
+কীভাবে detect করা যায়
+
+কীভাবে block করা যায়
+
+🧾 Responsibilities
+
+Static Analysis – code না চালিয়ে analyse
+
+Dynamic Analysis – sandbox-এ run করে observe
+
+Detailed technical reports লেখা
+
+🧠 Skills Needed
+
+Assembly
+
+C / low-level programming
+
+Reverse engineering mindset
+
+🧨 Penetration Tester (Pentester)
+
+Role: Systems hack করে vulnerabilities report করা
+
+🔍 What They Do
+
+Pentesters legally hacking করে দেখেন কোথায় system দুর্বল।
+
+🧾 Responsibilities
+
+Networks, apps, systems test করা
+
+Security assessments & audits
+
+Risk-based remediation advice দেওয়া
+
+🎓 Learning Paths
+
+JR Penetration Tester
+
+Offensive Pentesting
+
+🎭 Red Teamer
+
+Role: Real attacker-এর মতো act করা
+
+🔍 What They Do
+
+Red Teamers long-term attacks simulate করে:
+
+Initial access
+
+Persistence
+
+Lateral movement
+
+Evasion
+
+Goal → organisation-এর detection & response capability test করা।
+
+🧾 Responsibilities
+
+Real threat actor emulate করা
+
+Security controls bypass করা
+
+Actionable attack reports দেওয়া
+
+🎓 Learning Paths
+
+JR Penetration Tester
+
+Offensive Pentesting
+
+Red Teamer
+
+🧠 Key Takeaways
+
+Cyber security = many specialised roles
+
+Blue team ≠ boring (SOC, DFIR, Malware Analysis are powerful)
+
+Red team ≠ only hacking (strategy + stealth required)
+
+Hands-on practice + learning paths = career entry key
+
+📁 Suggested GitHub Structure
+Cyber-Security-101/
+└── Cyber-Security-Careers.md
+
+Day 6
+Pentesting Fundamentals
+
+(TryHackMe – Penetration Testing Basics)
+
+🔍 Task 1: What is Penetration Testing?
+📌 Overview
+
+A Penetration Test (Pentest) is an authorised, ethical security assessment where testers simulate real attackers to identify vulnerabilities in systems, networks, or applications.
+
+Pentesting uses:
+
+The same tools
+
+The same techniques
+
+The same methodologies
+
+that a real attacker would use — but with permission.
+
+📊 On average, there is 1 cyber attack every 39 seconds.
+
+🎯 Why Pentesting Matters
+
+Cybersecurity affects everyone (individuals & organisations)
+
+Helps protect:
+
+Devices
+
+Applications
+
+Sensitive data
+
+⚖️ Task 2: Penetration Testing Ethics
+🧠 Legal vs Ethical Hacking
+
+Pentesting is legal only when authorised by the system owner.
+Anything outside the agreed scope = illegal.
+
+Before testing starts:
+
+Tester & organisation agree on:
+
+Tools
+
+Techniques
+
+Targets
+➡️ This forms the Scope.
+
+🎩 Types of Hackers
+Hat Type	Description	Example
+White Hat	Legal & ethical	Authorised pentester
+Grey Hat	Mixed ethics, may break laws	Taking down scam sites
+Black Hat	Criminal intent	Ransomware attackers
+📜 Rules of Engagement (ROE)
+
+A formal document defining how the pentest is conducted.
+
+Section	Purpose
+Permission	Legal authorisation
+Test Scope	What can/can’t be tested
+Rules	Allowed & disallowed techniques
+✅ Task 2 Answers
+
+Hacker with permission → White Hat
+
+Stealing data → Black Hat
+
+Document defining engagement → Rules of Engagement
+
+🧭 Task 3: Penetration Testing Methodologies
+
+A methodology is the structured approach a pentester follows.
+There is no one-size-fits-all, but most follow similar stages.
+
+🔄 Common Pentesting Stages
+Stage	Description
+Information Gathering	OSINT, public info (no scanning)
+Enumeration / Scanning	Discover services & apps
+Exploitation	Exploit vulnerabilities
+Privilege Escalation	Gain higher access
+Post-Exploitation	Pivoting, data collection, cleanup, reporting
+📚 Popular Pentesting Frameworks
+🧩 OSSTMM
+
+(Open Source Security Testing Methodology Manual)
+
+Focus:
+
+Telecommunications
+
+Wired & wireless networks
+
+Pros
+
+Very detailed
+
+Flexible
+
+Universal standards
+
+Cons
+
+Hard to understand
+
+Complex terminology
+
+🌐 OWASP
+
+(Web Application Security)
+
+Focus:
+
+Web apps & services
+
+OWASP Top 10 vulnerabilities
+
+Pros
+
+Easy to learn
+
+Actively updated
+
+Covers testing → remediation
+
+Cons
+
+No formal accreditation
+
+Overlapping vulnerabilities
+
+🏛️ NIST Cybersecurity Framework
+
+Focus:
+
+Risk management
+
+Security controls
+
+Pros
+
+Widely used
+
+Very detailed
+
+Accredited
+
+Cons
+
+Weak auditing
+
+Limited cloud focus
+
+🇬🇧 NCSC CAF
+
+(Cyber Assessment Framework)
+
+Focus:
+
+Critical infrastructure
+
+Identity, monitoring, response
+
+Pros
+
+Government-backed
+
+Accreditation
+
+Covers resilience & recovery
+
+Cons
+
+New framework
+
+Less direct rules
+
+✅ Task 3 Answers
+
+Public info stage → Information Gathering
+
+Telecom pentesting framework → OSSTMM
+
+Web app testing framework → OWASP
+
+🧪 Task 4: Black Box, Grey Box & White Box Testing
+⬛ Black Box Testing
+
+No source code
+
+No internal knowledge
+
+Tester acts like a normal user
+⏱️ More time on reconnaissance
+
+◻️ White Box Testing
+
+Full source code access
+
+Deep logic testing
+
+Usually done by developers
+⏱️ Most time-consuming
+
+◼️ Grey Box Testing
+
+Partial internal knowledge
+
+Most common in real pentests
+
+Faster & efficient
+
+✅ Task 4 Answers
+
+No source code → Black Box
+
+Full source code → White Box
+
+🏢 Task 5: Practical – ACME Penetration Test
+🎯 Objective
+
+Perform a full penetration test following:
+
+Reconnaissance
+
+Enumeration
+
+Exploitation
+
+Reporting
+
+🏁 Flag
+THM{PENTEST_COMPLETE}
+
+🧠 Key Takeaways
+
+Pentesting = authorised ethical hacking
+
+Scope & ROE are legally critical
+
+Methodology guides actions
+
+Different frameworks fit different targets
+
+Testing scope affects depth & realism
+
+📁 Suggested GitHub Structure
+Cyber-Security-101/
+└── Pentesting-Fundamentals.md
+
+Day 7
+Principles of Security
+
+(TryHackMe – Security Fundamentals)
+
+🛡️ Task 1: Introduction
+
+Security is not a single control or tool — it is a layered approach.
+
+🔐 Defence in Depth
+
+Defence in Depth means applying multiple, varied layers of security to systems and data so that if one layer fails, others still protect the asset.
+
+Examples of layers:
+
+Network security (firewalls, IDS)
+
+Application security
+
+Access control
+
+Monitoring & logging
+
+Policies & training
+
+👉 Goal: Redundancy + resilience
+
+🔺 Task 2: The CIA Triad
+
+The CIA Triad is a foundational information security model used when designing security policies.
+
+🔁 CIA is a Cycle
+
+If any one element fails, the others become ineffective.
+
+Element	Purpose
+Confidentiality	Prevent unauthorised access
+Integrity	Prevent unauthorised modification
+Availability	Ensure data is accessible when needed
+🔐 Confidentiality
+
+Protects data from unauthorised disclosure.
+
+Examples:
+
+HR records only accessible to HR
+
+Government classification (Top Secret, Classified)
+
+Access control & encryption
+
+🧾 Integrity
+
+Ensures data remains accurate and unaltered unless authorised.
+
+Threats:
+
+Unauthorised modification
+
+Accidental changes
+
+System errors
+
+Controls:
+
+Access control
+
+Hashing
+
+Digital signatures
+
+Authentication
+
+⚡ Availability
+
+Ensures systems & data are available when needed.
+
+Key techniques:
+
+Redundant servers
+
+Failover systems
+
+DDoS protection
+
+SLAs (e.g. 99.99% uptime)
+
+✅ Task 2 Answers
+
+Prevent unauthorised modification → Integrity
+
+Ensure data is available → Availability
+
+Restrict access → Confidentiality
+
+🔑 Task 3: Principles of Privileges
+
+Access must be controlled based on:
+
+User role
+
+Data sensitivity
+
+🔐 Principle of Least Privilege
+
+Users should only have the minimum access required to perform their job.
+
+🧩 PIM vs PAM
+Concept	Meaning	Purpose
+PIM	Privileged Identity Management	Maps job role → system role
+PAM	Privileged Access Management	Manages what privileges the role has
+
+PAM also includes:
+
+Password management
+
+Auditing
+
+Reducing attack surface
+
+✅ Task 3 Answers
+
+PIM full form → Privileged Identity Management
+
+PAM full form → Privileged Access Management
+
+Manage role privileges → PAM
+
+Create role based on job → PIM
+
+🧱 Task 4: Security Models Continued
+
+Security models formally enforce CIA principles.
+
+🛡️ Bell-LaPadula Model (Confidentiality)
+
+Rule:
+
+No Read Up, No Write Down
+
+Access based on clearance
+
+Need-to-know basis
+
+Used in:
+
+Military
+
+Government
+
+Pros
+
+Simple & proven
+
+Matches hierarchy
+
+Cons
+
+Requires high trust
+
+Object existence still visible
+
+🧪 Biba Model (Integrity)
+
+Rule:
+
+No Read Down, No Write Up
+
+Prevents data corruption
+
+Prioritises integrity over confidentiality
+
+Used in:
+
+Software development
+
+Environments where correctness matters
+
+Pros
+
+Strong integrity guarantees
+
+Cons
+
+Can slow workflows
+
+Many access levels to manage
+
+✅ Task 4 Answers
+
+“No read up” model → Bell-LaPadula
+
+“No read down” model → Biba
+
+Military use → Bell-LaPadula
+
+Software dev use → Biba
+
+🧠 Task 5: Threat Modelling & Incident Response
+🔍 Threat Modelling
+
+A structured way to:
+
+Identify threats
+
+Identify vulnerabilities
+
+Design mitigations
+
+Core steps:
+
+Preparation
+
+Identification
+
+Mitigation
+
+Review
+
+Key inputs:
+
+Threat intelligence
+
+Asset identification
+
+Risk assessment
+
+🧩 STRIDE Model
+Principle	Description
+Spoofing	Impersonation (auth required)
+Tampering	Data integrity protection
+Repudiation	Logging & auditing
+Information Disclosure	Prevent data leaks
+Denial of Service	Resource abuse prevention
+Elevation of Privilege	Prevent privilege escalation
+🚨 Incident Response (IR)
+
+A security incident = breach, attack, or compromise.
+
+Handled by:
+👉 CSIRT (Computer Security Incident Response Team)
+
+🔄 Incident Response Phases
+Phase	Purpose
+Preparation	Tools & plans ready
+Identification	Detect incident
+Containment	Stop spread
+Eradication	Remove threat
+Recovery	Restore operations
+Lessons Learned	Improve defences
+✅ Task 5 Answers
+
+Spoofing model → STRIDE
+
+IR full form → Incident Response
+
+Improve integrity → Tampering
+
+Return to normal ops → Recovery
+
+🧠 Key Takeaways
+
+Security = layers, not a single tool
+
+CIA Triad underpins all security decisions
+
+Least privilege reduces blast radius
+
+Models enforce security principles formally
+
+Threat modelling + IR = real-world defence
+
+📁 Suggested GitHub Structure
+Cyber-Security-101/
+└── Principles-of-Security.md
+
+Day 8
+Walking An Application
+
+(TryHackMe – Web Application Recon Using Browser Tools)
+
+🎯 Overview
+
+This room focuses on manual web application review using only built-in browser tools.
+Automated scanners often miss:
+
+logic flaws
+
+hidden content
+
+client-side controls
+
+exposed comments & configs
+
+A real pentester must always walk the application manually first.
+
+🧰 Browser Tools Used
+Tool	Purpose
+View Source	Inspect raw HTML, comments, links
+Inspector	Modify live DOM & bypass client-side controls
+Debugger / Sources	Analyze & pause JavaScript execution
+Network	Monitor requests, AJAX calls, hidden endpoints
+🧭 Task 1: Environment Setup
+
+Start the VM
+
+Open the provided web URL
+
+All testing is done inside the browser
+
+✅ No tools, no scripts — browser only
+
+🗺️ Task 2: Exploring the Website
+🔍 Goal
+
+Identify interactive features and attack surface.
+
+🔑 What to Look For
+
+Login & signup forms
+
+Password reset flows
+
+File uploads
+
+Admin / customer areas
+
+URL parameters (e.g. ?id=1)
+
+Hidden redirects
+
+📝 Example Mapping
+
+A pentester documents:
+
+URL
+
+Feature
+
+Inputs
+
+Access controls
+
+Notes
+
+This mapping guides deeper testing later.
+
+🧾 Task 3: Viewing Page Source
+📄 What is Page Source?
+
+The raw code returned by the server:
+
+HTML
+
+CSS
+
+JavaScript
+
+🧨 Findings from Page Source
+1️⃣ HTML Comments
+
+Developers often leave comments like:
+
+<!-- Temporary homepage -->
+
+
+These can reveal:
+
+hidden pages
+
+dev notes
+
+internal URLs
+
+✅ Flag:
+THM{HTML_COMMENTS_ARE_DANGEROUS}
+
+2️⃣ Hidden Links
+
+Links not visible on the UI but present in HTML.
+
+✅ Flag:
+THM{NOT_A_SECRET_ANYMORE}
+
+3️⃣ Directory Listing Enabled
+
+Misconfigured web server allowed browsing files directly.
+
+Risks:
+
+Backup files
+
+Configs
+
+Source code
+
+Credentials
+
+✅ Flag:
+THM{INVALID_DIRECTORY_PERMISSIONS}
+
+4️⃣ Framework Disclosure
+
+Page source revealed:
+
+framework name
+
+version
+
+outdated software
+
+Outdated frameworks = known CVEs.
+
+✅ Flag:
+THM{KEEP_YOUR_SOFTWARE_UPDATED}
+
+🧩 Task 4: Developer Tools – Inspector
+🧠 Why Inspector Matters
+
+Page source ≠ rendered page
+
+Client-side controls can be modified
+
+💸 Paywall Bypass
+
+A premium-only article was blocked using CSS:
+
+display: block;
+
+
+Changing it to:
+
+display: none;
+
+
+removed the paywall — no authentication required.
+
+✅ Flag:
+THM{NOT_SO_HIDDEN}
+
+📌 Lesson:
+Client-side access control ≠ real security
+
+🧠 Task 5: Developer Tools – Debugger
+🔎 JavaScript Debugging
+
+Minified & obfuscated JS hides logic
+
+Debugger lets you:
+
+pause execution
+
+inspect variables
+
+control flow
+
+🟥 Red Flash Investigation
+
+JS removed a red popup instantly
+
+Breakpoint added before removal
+
+Execution paused → popup stayed
+
+✅ Flag:
+THM{CATCH_ME_IF_YOU_CAN}
+
+📌 Lesson:
+JavaScript protections can be bypassed locally.
+
+🌐 Task 6: Developer Tools – Network
+📡 Network Tab
+
+Shows:
+
+every request
+
+endpoints
+
+parameters
+
+AJAX calls
+
+📩 AJAX Form Submission
+
+Contact form submitted data in background.
+
+Inspecting the request revealed:
+
+hidden endpoint
+
+server response
+
+flag in response body
+
+✅ Flag:
+THM{GOT_AJAX_FLAG}
+
+📌 Lesson:
+Sensitive data & endpoints often hide in network traffic.
+
+🧠 Key Security Takeaways
+
+Always walk the app manually
+
+Never trust client-side restrictions
+
+HTML comments are dangerous
+
+Directory listing = information disclosure
+
+JavaScript ≠ security control
+
+Network tab reveals hidden behaviour
+
+📁 Suggested GitHub Placement
+Cyber-Security-101/
+└── Web-Application-Security/
+    └── Walking-An-Application.md
