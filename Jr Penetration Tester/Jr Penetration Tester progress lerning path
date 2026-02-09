@@ -817,9 +817,6 @@ Red team ≠ only hacking (strategy + stealth required)
 
 Hands-on practice + learning paths = career entry key
 
-📁 Suggested GitHub Structure
-Cyber-Security-101/
-└── Cyber-Security-Careers.md
 
 Day 6
 Pentesting Fundamentals
@@ -1069,9 +1066,6 @@ Different frameworks fit different targets
 
 Testing scope affects depth & realism
 
-📁 Suggested GitHub Structure
-Cyber-Security-101/
-└── Pentesting-Fundamentals.md
 
 Day 7
 Principles of Security
@@ -1345,9 +1339,6 @@ Models enforce security principles formally
 
 Threat modelling + IR = real-world defence
 
-📁 Suggested GitHub Structure
-Cyber-Security-101/
-└── Principles-of-Security.md
 
 Day 8
 Walking An Application
@@ -1588,7 +1579,346 @@ JavaScript ≠ security control
 
 Network tab reveals hidden behaviour
 
-📁 Suggested GitHub Placement
-Cyber-Security-101/
-└── Web-Application-Security/
-    └── Walking-An-Application.md
+
+Day 9
+Content Discovery
+
+(TryHackMe – Web Application Recon & Enumeration)
+
+🎯 What Is Content Discovery?
+
+In web application security, content means anything hosted by the application, not just visible pages.
+
+Examples:
+
+Hidden directories
+
+Admin or staff portals
+
+Backup files
+
+Logs & config files
+
+Old versions of pages
+
+Cloud storage (S3 buckets)
+
+👉 Content Discovery is the process of finding non-obvious, unintended, or hidden resources.
+
+🧭 Content Discovery Methods
+
+There are three primary approaches:
+
+Method	Description
+Manual	Checking files & behaviour by hand
+Automated	Using tools + wordlists
+OSINT	External public information
+✋ Task 1: Discovery Methods
+
+M → Manually
+
+A → Automated
+
+O → OSINT
+
+🧠 Task 2: Manual Discovery – robots.txt
+📄 robots.txt
+
+Controls what search engines should not crawl.
+
+Pentesters love it because it often reveals:
+
+Admin areas
+
+Staff portals
+
+Sensitive directories
+
+Example:
+
+http://MACHINE_IP/robots.txt
+
+🔎 Finding
+
+Disallowed directory found:
+
+/staff-portal
+
+
+📌 Lesson:
+robots.txt hides content from search engines — not from attackers.
+
+🖼️ Task 3: Manual Discovery – Favicon
+🔖 Why Favicon Matters
+
+Frameworks often ship with default favicons.
+If unchanged, they reveal:
+
+Framework name
+
+Technology stack
+
+🔧 Technique
+
+Download favicon
+
+Hash it (MD5)
+
+Compare with OWASP favicon database
+
+🧠 Result
+
+Framework identified:
+
+cgiirc
+
+
+📌 Lesson:
+Small assets can leak big architectural clues.
+
+🗂️ Task 4: Manual Discovery – sitemap.xml
+📄 sitemap.xml
+
+Lists pages the website wants indexed.
+
+Can reveal:
+
+Old pages
+
+Hidden areas
+
+Forgotten routes
+
+Example:
+
+http://MACHINE_IP/sitemap.xml
+
+🔎 Finding
+/s3cr3t-area
+
+
+📌 Lesson:
+Sitemaps often expose paths not linked anywhere else.
+
+📡 Task 5: Manual Discovery – HTTP Headers
+🧾 HTTP Headers
+
+Server responses can leak:
+
+Web server
+
+Programming language
+
+Custom debug headers
+
+🔧 Command
+curl http://MACHINE_IP -v
+
+🚩 Finding
+
+Custom header revealed flag:
+
+THM{HEADER_FLAG}
+
+
+📌 Lesson:
+Headers = passive fingerprinting goldmine.
+
+🧱 Task 6: Manual Discovery – Framework Stack
+🔍 Framework Identification
+
+Clues found in:
+
+HTML comments
+
+Footer credits
+
+Page source
+
+Framework documentation often reveals:
+
+Default paths
+
+Admin panels
+
+Credentials
+
+🏁 Result
+
+Admin portal exposed:
+
+THM{CHANGE_DEFAULT_CREDENTIALS}
+
+
+📌 Lesson:
+Default configs + default creds = 🚨 critical risk.
+
+🌐 Task 7: OSINT – Google Dorking
+🔎 Google Dorks
+
+Advanced search operators to uncover exposed content.
+
+Operator	Purpose
+site:	Search only one domain
+inurl:	Keyword in URL
+filetype:	Specific file type
+intitle:	Keyword in page title
+✅ Answer
+
+Operator to restrict domain:
+
+site:
+
+🧪 Task 8: OSINT – Wappalyzer
+🧠 Wappalyzer
+
+Detects:
+
+Frameworks
+
+CMS
+
+JS libraries
+
+Version numbers
+
+Used as:
+
+Website
+
+Browser extension
+
+✅ Tool:
+
+Wappalyzer
+
+🕰️ Task 9: OSINT – Wayback Machine
+📜 Wayback Machine
+
+Archives historical versions of websites.
+
+Use cases:
+
+Discover removed pages
+
+Old admin panels
+
+Legacy endpoints
+
+✅ URL:
+
+https://archive.org/web/
+
+🧑‍💻 Task 10: OSINT – GitHub
+🗃️ GitHub Recon
+
+Search for:
+
+Company name
+
+Domain name
+
+API keys
+
+Credentials
+
+Config files
+
+✅ Answer
+
+Git is a:
+
+Version Control System
+
+
+📌 Lesson:
+Public repos = frequent data leaks.
+
+☁️ Task 11: OSINT – S3 Buckets
+🪣 Amazon S3 Buckets
+
+Cloud storage accessible over HTTP/HTTPS.
+
+Format:
+
+{name}.s3.amazonaws.com
+
+
+Misconfigurations can expose:
+
+Backups
+
+Logs
+
+Source code
+
+Sensitive data
+
+✅ Answer:
+
+.s3.amazonaws.com
+
+🤖 Task 12: Automated Discovery
+⚙️ What Is Automated Discovery?
+
+Using tools + wordlists to brute-force:
+
+Files
+
+Directories
+
+📚 Wordlists
+
+Common resource:
+
+SecLists
+
+🛠️ Tools Used
+ffuf
+ffuf -w common.txt -u http://MACHINE_IP/FUZZ
+
+dirb
+dirb http://MACHINE_IP/ common.txt
+
+gobuster
+gobuster dir -u http://MACHINE_IP/ -w common.txt
+
+🔎 Findings
+
+Directory discovered:
+
+/monthly
+
+
+Log file discovered:
+
+/development.log
+
+
+📌 Lesson:
+Logs often contain:
+
+Debug info
+
+Credentials
+
+Stack traces
+
+🧠 Key Takeaways
+
+Always combine manual + OSINT + automation
+
+robots.txt & sitemap.xml leak intent
+
+Favicons & headers fingerprint stacks
+
+GitHub & S3 are common leak sources
+
+Logs are high-value targets
+
+Content discovery = foundation of web pentesting
+
+
+
+Day 10
+
