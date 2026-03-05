@@ -3276,4 +3276,1730 @@ Where are session tokens stored?
 document.cookie
 
 Day 15
+Race Conditions Vulnerability
+📌 Overview
+
+A Race Condition is a vulnerability that occurs when the behavior of a system depends on the timing or sequence of events.
+
+It typically happens when multiple threads access and modify the same shared resource simultaneously without proper synchronization.
+
+Attackers can exploit this to perform actions such as:
+
+Reusing coupons multiple times
+
+Transferring more money than available
+
+Redeeming gift cards repeatedly
+
+Bypassing transaction limits
+
+🧠 What is a Race Condition?
+
+A race condition occurs when:
+
+Two or more processes or threads access the same resource simultaneously,
+and the final result depends on which thread finishes first.
+
+If the system does not enforce proper locking or validation mechanisms, attackers can manipulate the timing to exploit logic flaws.
+
+🔁 Time-of-Check to Time-of-Use (TOCTOU)
+
+A common race condition vulnerability.
+
+Steps:
+
+1️⃣ System checks a condition
+2️⃣ There is a small delay
+3️⃣ System performs the action
+
+If an attacker performs another request during the delay, they can bypass the check.
+
+Example:
+
+Check balance → Execute withdrawal
+
+If two withdrawals happen simultaneously, both may pass validation.
+
+🧵 Understanding Multi-Threading
+
+To understand race conditions, we must understand how programs execute.
+
+Program
+
+A program is a static set of instructions.
+
+Example:
+
+Python code
+Java application
+Process
+
+A process is a program currently executing.
+
+A process contains:
+
+Program code
+
+Memory
+
+Execution state
+
+Process states include:
+
+New
+Ready
+Running
+Waiting
+Terminated
+
+Important state:
+
+Waiting
+
+This is when the process is waiting for an I/O event.
+
+Thread
+
+A thread is a lightweight execution unit inside a process.
+
+Threads share:
+
+Memory
+
+Variables
+
+Resources
+
+Example:
+
+One web server process
+Multiple request-handling threads
+⚡ Parallel vs Serial Execution
+Serial
+
+Requests handled one at a time
+
+User1 → User2 → User3
+Parallel
+
+Requests handled simultaneously
+
+User1 + User2 + User3
+
+Parallel execution introduces race condition risks.
+
+🏦 Race Condition Example (Bank Withdrawal)
+
+Initial balance:
+
+$100
+
+Two threads perform withdrawal.
+
+Thread1:
+
+Checks balance → $100
+Withdraws $45
+
+Thread2:
+
+Checks balance → $100
+Withdraws $35
+
+Final balance becomes inconsistent due to simultaneous operations.
+
+🧪 Python Race Condition Example
+
+Two threads modify the same variable:
+
+x = 0
+
+def increase():
+    global x
+    for i in range(10):
+        x += 1
+
+Result:
+
+Thread order becomes unpredictable
+
+Output changes every run.
+
+🏗 Web Application Architecture
+
+Web apps follow a 3-tier architecture.
+
+1️⃣ Presentation Layer
+
+Client side:
+
+Browser
+
+HTML
+
+CSS
+
+JavaScript
+
+2️⃣ Application Layer
+
+Server-side logic:
+
+Node.js
+
+PHP
+
+Python
+
+Java
+
+Handles:
+
+Business logic
+Authentication
+Transactions
+3️⃣ Data Layer
+
+Database system:
+
+MySQL
+
+PostgreSQL
+
+MongoDB
+
+Stores application data.
+
+📊 State Diagrams
+
+Race conditions often occur due to multiple internal states.
+
+Example: Money Transfer
+
+Initial State Diagram
+1. Amount not sent
+2. Amount sent
+
+Total states:
+
+2
+Updated State Diagram
+
+Added validation stage:
+
+1. Checking balance
+2. Amount not sent
+3. Amount sent
+
+Total states:
+
+3
+Coupon Validation Example
+
+Final complex flow:
+
+1. Coupon not applied
+2. Checking validity
+3. Checking constraints
+4. Recalculating total
+5. Coupon applied
+
+Total states:
+
+5
+
+These intermediate states create a small timing window.
+
+Attackers exploit that window.
+
+⚔ Exploiting Race Conditions
+
+Tools used:
+
+Burp Suite Repeater
+Attack Method
+
+Steps:
+
+1️⃣ Capture request with Burp Proxy
+2️⃣ Send request to Repeater
+3️⃣ Duplicate request multiple times
+4️⃣ Send requests simultaneously
+
+Burp Repeater Options
+Send in Sequence
+
+Requests sent one after another.
+
+Not effective for race conditions
+Send in Parallel
+
+Requests sent at the same time.
+
+Ideal for race condition exploitation
+Synchronization Technique
+
+Burp uses Last-Byte Synchronization:
+
+All requests are sent except the final byte.
+
+Then the final byte is sent simultaneously.
+
+This ensures requests reach the server at nearly the same time.
+
+🧪 Lab Exploit Example
+
+Mobile operator web app.
+
+Goal:
+
+Transfer more credit than available
+
+Technique:
+
+Duplicate transfer request 20 times
+Send requests in parallel
+
+Result:
+
+Multiple successful transfers before balance update.
+
+Flag Obtained
+THM{PHONE-RACE}
+🏦 Challenge Lab
+
+Bank transfer web app.
+
+Goal:
+
+Increase account balance above $1000
+
+Using race condition attack.
+
+Flag
+THM{BANK-RED-FLAG}
+🔍 Detecting Race Conditions
+
+Detection methods:
+
+Analyze application states
+
+Monitor transaction logs
+
+Test concurrency behavior
+
+Perform parallel request testing
+
+Use tools like Burp Repeater
+
+🛡 Mitigation Techniques
+1️⃣ Synchronization Locks
+
+Only one thread can access resource at a time.
+
+Example:
+
+mutex locks
+2️⃣ Atomic Operations
+
+Operations executed as a single indivisible step.
+
+Example:
+
+balance -= amount
+3️⃣ Database Transactions
+
+Ensures operations complete together.
+
+BEGIN TRANSACTION
+UPDATE balance
+COMMIT
+
+Prevents inconsistent data.
+
+⚠ Real-World Impact
+
+Race conditions have caused:
+
+Cryptocurrency exchange exploits
+
+Gift card abuse
+
+Financial fraud
+
+Payment bypass attacks
+
+🎯 Key Takeaways
+
+Race conditions exploit timing flaws.
+
+Shared resources create vulnerabilities.
+
+Multi-threaded systems increase risk.
+
+Parallel requests can bypass logic checks.
+
+Proper locking and transactions prevent exploitation.
+
+🔥 Tools Used
+
+Burp Suite Proxy
+
+Burp Suite Repeater
+
+Wireshark
+
+Browser DevTools
+
+📚 Practical Flags
+THM{PHONE-RACE}
+THM{BANK-RED-FLAG}
+
+Day 16
+Command Injection
+📌 Overview
+
+Command Injection is a web vulnerability where an attacker can execute operating system commands through a vulnerable application.
+
+This occurs when:
+
+User input is passed directly to system commands
+without proper validation or sanitization.
+
+Because of this, attackers can execute commands on the server with the same privileges as the application.
+
+Example:
+
+whoami
+
+This command reveals which user account the application is running as.
+
+Command Injection is often considered a form of:
+
+Remote Code Execution (RCE)
+
+because attackers can remotely run commands on the system.
+
+🧠 How Command Injection Works
+
+Many web applications execute system commands using programming functions.
+
+Examples:
+
+PHP
+exec()
+system()
+passthru()
+Python
+subprocess.run()
+os.system()
+
+If user input is included inside these commands, an attacker can inject additional commands.
+
+🧪 Example Vulnerable Code (PHP)
+$title = $_GET['title'];
+system("grep $title songtitle.txt");
+
+Steps:
+
+1️⃣ User enters a song title
+2️⃣ Application stores input in $title
+3️⃣ The command searches a file using grep
+4️⃣ Output is returned to the user
+
+Vulnerability
+
+If the attacker enters:
+
+Beatles; whoami
+
+The executed command becomes:
+
+grep Beatles songtitle.txt; whoami
+
+Now the system runs two commands.
+
+⚔ Command Chaining Operators
+
+Attackers use shell operators to run multiple commands.
+
+Operator	Function
+;	Execute another command
+&&	Run next command if first succeeds
+&	Run commands in background
+`	`
+
+Example:
+
+ls; whoami
+🔎 Types of Command Injection
+
+Two main types exist.
+
+1️⃣ Verbose Command Injection
+
+The application directly shows command output.
+
+Example payload:
+
+whoami
+
+Output example:
+
+www-data
+
+This makes exploitation easier.
+
+2️⃣ Blind Command Injection
+
+The application does not show command output.
+
+Attackers must detect success indirectly.
+
+Methods include:
+
+Time delay
+
+File creation
+
+External requests
+
+⏱ Detecting Blind Injection (Time Delay)
+
+Example payload:
+
+sleep 5
+
+If the website pauses for 5 seconds, the command executed successfully.
+
+Another method
+ping -c 5 127.0.0.1
+
+The server delays due to the ping command.
+
+📡 Output Redirection
+
+Attackers may redirect output to a file.
+
+Example:
+
+whoami > output.txt
+
+Then read it:
+
+cat output.txt
+🧰 Useful Command Injection Payloads
+Linux Payloads
+Payload	Purpose
+whoami	Show running user
+ls	List files
+ping	Time delay testing
+sleep	Delay execution
+nc	Reverse shell
+Windows Payloads
+Payload	Purpose
+whoami	Show running user
+dir	List directory
+ping	Delay testing
+timeout	Delay testing
+🧪 Example Exploit
+
+Payload:
+
+; whoami
+
+Application executes:
+
+command ; whoami
+
+Result:
+
+www-data
+
+Meaning the web server runs under the www-data user.
+
+🧰 Using cURL for Testing
+
+Example request:
+
+curl http://target.app/search.php?search=Beatles;whoami
+
+The injected command executes on the server.
+
+🛡 Preventing Command Injection
+
+Several methods exist.
+
+1️⃣ Avoid Dangerous Functions
+
+Avoid functions such as:
+
+exec()
+system()
+passthru()
+
+Use safer alternatives when possible.
+
+2️⃣ Input Sanitization
+
+Filter user input to allow only safe characters.
+
+Example:
+
+Only numbers allowed
+
+Reject inputs containing:
+
+; & | > < $
+3️⃣ Input Validation
+
+Allow only expected formats.
+
+Example:
+
+numbers only
+4️⃣ Least Privilege
+
+Run applications with minimal permissions.
+
+Example:
+
+www-data
+
+Not root.
+
+🧪 Practical Lab
+
+Goal:
+
+Read flag from /home/tryhackme/flag.txt
+
+Example payload:
+
+; cat /home/tryhackme/flag.txt
+Application User
+www-data
+Flag
+THM{COMMAND_INJECTION_COMPLETE}
+⚠ Real-World Impact
+
+Command injection can allow attackers to:
+
+Read system files
+
+Access databases
+
+Modify server files
+
+Install malware
+
+Gain reverse shells
+
+Take full control of the server
+
+Because of this, command injection often leads to full system compromise.
+
+🎯 Key Takeaways
+
+Command Injection allows execution of OS commands.
+
+Occurs when user input is not sanitized.
+
+Can lead to Remote Code Execution (RCE).
+
+Two main types: Blind and Verbose.
+
+Prevention requires strict input validation and avoiding unsafe functions.
+
+🔥 Tools Used
+
+Burp Suite
+
+cURL
+
+Linux CLI
+
+Browser DevTools
+
+📚 Practical Flags
+THM{COMMAND_INJECTION_COMPLETE}
+
+Day 17
+SQL Injection (SQLi)
+📌 Overview
+
+SQL Injection (SQLi) is a web vulnerability that occurs when user input is inserted directly into SQL queries without proper validation.
+
+Attackers can manipulate the query to:
+
+Read sensitive data
+
+Bypass authentication
+
+Modify database records
+
+Delete data
+
+Execute administrative database operations
+
+SQL Injection is one of the most dangerous and oldest web vulnerabilities and is part of the OWASP Top 10.
+
+🧠 What is SQL?
+
+SQL stands for:
+
+Structured Query Language
+
+It is used to communicate with databases.
+
+Common operations include:
+
+Retrieving data
+
+Inserting data
+
+Updating data
+
+Deleting data
+
+🗄 What is a Database?
+
+A database stores structured data electronically.
+
+The software that manages a database is called:
+
+DBMS (Database Management System)
+
+Examples:
+
+MySQL
+
+PostgreSQL
+
+Microsoft SQL Server
+
+SQLite
+
+📊 Database Structure
+Tables
+
+Data is stored in tables.
+
+A table contains:
+
+Columns (fields)
+
+Rows (records)
+
+Example:
+
+id	username	password
+1	jon	pass123
+2	admin	p4ssword
+Columns
+
+Columns define the type of data stored.
+
+Examples:
+
+Integer
+
+String
+
+Date
+
+Rows
+
+Rows contain the actual data records.
+
+Relational vs Non-Relational Databases
+Relational Databases
+
+Use:
+
+Tables
+
+Rows
+
+Columns
+
+Examples:
+
+MySQL
+
+PostgreSQL
+
+SQL Server
+
+Non-Relational Databases (NoSQL)
+
+Do not use table structure.
+
+Examples:
+
+MongoDB
+
+Cassandra
+
+Elasticsearch
+
+🔎 Basic SQL Commands
+SELECT
+
+Used to retrieve data.
+
+SELECT * FROM users;
+
+Retrieve specific columns:
+
+SELECT username,password FROM users;
+WHERE Clause
+
+Used to filter data.
+
+SELECT * FROM users WHERE username='admin';
+LIMIT
+
+Used to restrict returned rows.
+
+SELECT * FROM users LIMIT 1;
+LIKE Operator
+
+Used for pattern matching.
+
+Examples:
+
+username LIKE 'a%'
+username LIKE '%n'
+username LIKE '%mi%'
+UNION
+
+Used to combine results from multiple queries.
+
+SELECT name,address FROM customers
+UNION
+SELECT company,address FROM suppliers;
+
+Requirements:
+
+Same number of columns
+
+Same column order
+
+Similar data types
+
+INSERT
+
+Used to add new data.
+
+INSERT INTO users (username,password)
+VALUES ('bob','password123');
+UPDATE
+
+Used to modify existing records.
+
+UPDATE users
+SET username='root'
+WHERE username='admin';
+DELETE
+
+Used to remove data.
+
+DELETE FROM users WHERE username='martin';
+⚠ What is SQL Injection?
+
+SQL Injection happens when user input becomes part of the SQL query.
+
+Example vulnerable query:
+
+SELECT * FROM blog WHERE id=1 AND private=0;
+
+If a user injects:
+
+2;--
+
+The query becomes:
+
+SELECT * FROM blog WHERE id=2;-- AND private=0;
+
+The comment operator:
+
+--
+
+ignores the rest of the query.
+
+This bypasses security checks.
+
+Types of SQL Injection
+
+There are three main types.
+
+1️⃣ In-Band SQL Injection
+
+The attacker uses the same communication channel to exploit and retrieve data.
+
+Two main forms:
+
+Error-Based SQLi
+
+Uses database error messages to reveal information.
+
+Example test:
+
+'
+
+If an SQL error appears, the application is vulnerable.
+
+Union-Based SQLi
+
+Uses the UNION operator to extract data.
+
+Example:
+
+0 UNION SELECT 1,2,database()
+
+Enumerating tables:
+
+SELECT table_name
+FROM information_schema.tables
+
+Flag from Level 1:
+
+THM{SQL_INJECTION_3840}
+2️⃣ Blind SQL Injection
+
+The application does not show database errors.
+
+Attackers rely on logic responses.
+
+Authentication Bypass
+
+Example login query:
+
+SELECT * FROM users
+WHERE username='%username%'
+AND password='%password%'
+
+Payload:
+
+' OR 1=1;--
+
+Resulting query:
+
+SELECT * FROM users
+WHERE username=''
+AND password=''
+OR 1=1;
+
+Because 1=1 is always true, login succeeds.
+
+Flag:
+
+THM{SQL_INJECTION_9581}
+3️⃣ Boolean-Based Blind SQLi
+
+The application returns true/false responses.
+
+Example:
+
+admin123' UNION SELECT 1,2,3 WHERE database() LIKE 's%';--
+
+If response is true, the database starts with s.
+
+Attackers repeat this process to enumerate:
+
+Database name
+
+Tables
+
+Columns
+
+Data
+
+Flag:
+
+THM{SQL_INJECTION_1093}
+4️⃣ Time-Based Blind SQLi
+
+Used when no output is visible.
+
+Attackers use time delays.
+
+Example:
+
+admin123' UNION SELECT SLEEP(5);--
+
+If response delays 5 seconds, the injection succeeded.
+
+Flag:
+
+THM{SQL_INJECTION_MASTER}
+📡 Out-of-Band SQL Injection
+
+Uses two communication channels:
+
+1️⃣ Attack channel (web request)
+2️⃣ Data exfiltration channel
+
+Example protocols:
+
+DNS
+HTTP
+
+The database sends data to the attacker's server.
+
+🛡 Preventing SQL Injection
+1️⃣ Prepared Statements
+
+Use parameterized queries.
+
+Example:
+
+SELECT * FROM users WHERE username=?;
+
+This prevents user input from modifying the SQL query.
+
+2️⃣ Input Validation
+
+Allow only expected inputs.
+
+Example:
+
+numbers only
+
+limited characters
+
+3️⃣ Escaping User Input
+
+Special characters must be escaped:
+
+'
+"
+$
+\
+🎯 Key Takeaways
+
+SQL Injection allows attackers to manipulate database queries.
+
+It occurs when user input is not validated.
+
+Types include In-Band, Blind, and Out-of-Band.
+
+Attackers can extract sensitive data or bypass authentication.
+
+Prepared statements are the most effective defense.
+
+🔧 Tools Commonly Used
+
+Burp Suite
+
+SQLmap
+
+Browser DevTools
+
+cURL
+
+🏁 Flags Collected
+THM{SQL_INJECTION_3840}
+THM{SQL_INJECTION_9581}
+THM{SQL_INJECTION_1093}
+THM{SQL_INJECTION_MASTER}
+
+Day 18
+Burp Suite Basics
+Overview
+
+Burp Suite is a Java-based web security testing framework widely used for web application penetration testing.
+
+It allows security testers to:
+
+Intercept HTTP/HTTPS traffic
+
+Modify requests and responses
+
+Test web applications for vulnerabilities
+
+Analyse application behaviour
+
+Burp Suite is considered the industry standard tool for manual web security testing.
+
+Burp Suite Editions
+
+Burp Suite is available in three editions.
+
+1️⃣ Burp Suite Community Edition
+
+Free version with basic tools.
+
+Features include:
+
+Proxy
+
+Repeater
+
+Intruder (rate limited)
+
+Decoder
+
+Comparer
+
+Sequencer
+
+2️⃣ Burp Suite Professional
+
+Paid version used by penetration testers.
+
+Extra features include:
+
+Automated vulnerability scanner
+
+Faster Intruder attacks
+
+Report generation
+
+Burp Collaborator
+
+API integration
+
+Unlimited extensions
+
+3️⃣ Burp Suite Enterprise
+
+Designed for continuous automated scanning.
+
+Key characteristics:
+
+Runs on a server
+
+Periodically scans applications
+
+Similar to tools like Nessus
+
+Core Concept
+
+Burp Suite works as a proxy server between:
+
+Browser ↔ Burp Suite ↔ Target Server
+
+This allows interception and manipulation of web traffic.
+
+Main Tools in Burp Suite Community
+Proxy
+
+The Burp Proxy intercepts HTTP/HTTPS traffic.
+
+Capabilities:
+
+Capture requests
+
+Modify requests
+
+Forward or drop requests
+
+Analyse responses
+
+Example use cases:
+
+Bypass filters
+
+Modify parameters
+
+Test vulnerabilities
+
+Repeater
+
+Repeater allows sending the same request multiple times.
+
+Useful for:
+
+Testing payloads
+
+Exploiting SQL Injection
+
+Testing API endpoints
+
+Intruder
+
+Used for:
+
+Brute force attacks
+
+Fuzzing inputs
+
+Password guessing
+
+Example:
+
+Login brute-force attack
+
+Community edition has rate limits.
+
+Decoder
+
+Used for:
+
+Encoding data
+
+Decoding captured payloads
+
+Common formats:
+
+URL encoding
+
+Base64
+
+Hex
+
+Comparer
+
+Used to compare two pieces of data.
+
+Comparison methods:
+
+Word-level comparison
+
+Byte-level comparison
+
+Useful when analysing responses.
+
+Sequencer
+
+Used to test randomness of tokens.
+
+Example:
+
+Session cookies
+
+CSRF tokens
+
+If tokens are predictable → vulnerability.
+
+Burp Suite Dashboard
+
+The dashboard has four main sections.
+
+Tasks
+
+Shows background tasks such as:
+
+Live Passive Crawl
+Event Log
+
+Displays Burp activity:
+
+Proxy start
+
+Connections
+
+System events
+
+Issue Activity
+
+Shows vulnerabilities discovered by scanner
+(Professional edition only).
+
+Advisory
+
+Provides vulnerability descriptions and remediation advice.
+
+Navigation Shortcuts
+
+Burp provides useful keyboard shortcuts.
+
+Shortcut	Function
+Ctrl + Shift + D	Dashboard
+Ctrl + Shift + T	Target
+Ctrl + Shift + P	Proxy
+Ctrl + Shift + I	Intruder
+Ctrl + Shift + R	Repeater
+
+Example:
+
+Ctrl + Shift + P → Proxy Tab
+Burp Proxy Configuration
+
+To intercept traffic, the browser must use Burp as a proxy.
+
+Typical proxy configuration:
+
+IP: 127.0.0.1
+Port: 8080
+
+Browser traffic is then routed through Burp.
+
+Using FoxyProxy
+
+FoxyProxy is a browser extension used to manage proxy settings.
+
+Configuration example:
+
+Proxy IP: 127.0.0.1
+Port: 8080
+
+Once enabled, Burp intercepts requests.
+
+Target Tab
+
+The Target tab helps map the web application.
+
+Features include:
+
+Site Map
+
+Displays discovered endpoints in a tree structure.
+
+Example:
+
+/login
+/admin
+/api
+/profile
+Issue Definitions
+
+Provides descriptions of web vulnerabilities.
+
+Examples:
+
+XSS
+
+SQL Injection
+
+CSRF
+
+Scope Settings
+
+Defines which domains Burp should analyse.
+
+Example:
+
+http://targetsite.com
+
+This prevents capturing unrelated traffic.
+
+HTTPS Proxying
+
+HTTPS traffic requires Burp’s certificate to be trusted.
+
+Steps:
+
+1️⃣ Download certificate
+
+http://burp/cert
+
+2️⃣ Import into browser
+
+3️⃣ Trust PortSwigger CA certificate
+
+After this, HTTPS traffic can be intercepted.
+
+Built-in Burp Browser
+
+Burp includes a Chromium-based browser.
+
+Advantages:
+
+Already configured with proxy
+
+No manual browser setup required
+
+Example Attack (XSS)
+
+Burp can be used to bypass client-side filters.
+
+Example payload:
+
+<script>alert("Successful XSS")</script>
+
+Steps:
+
+1️⃣ Intercept request with Proxy
+2️⃣ Modify request parameters
+3️⃣ URL encode payload
+4️⃣ Forward request
+
+If vulnerable, the script executes.
+
+Key Concepts Learned
+
+Burp Suite enables:
+
+HTTP request interception
+
+Request modification
+
+Web vulnerability testing
+
+Manual security testing
+
+Important tools:
+
+Proxy
+Repeater
+Intruder
+Decoder
+Comparer
+Sequencer
+Flag Obtained
+THM{NmNlZTliNGE1MWU1ZTQzMzgzNmFiNWVk}
+Tools Used
+
+Burp Suite Community
+
+FoxyProxy
+
+Firefox Browser
+
+Skills Gained
+
+Web traffic interception
+
+Proxy configuration
+
+Request manipulation
+
+Web vulnerability testing
+
+XSS testing with Burp
+
+Day 18
+Burp Suite Repeater
+Overview
+
+Burp Suite Repeater is a tool inside the Burp Suite framework used for manually modifying and resending HTTP requests.
+
+It allows security testers to:
+
+Modify intercepted requests
+
+Send requests repeatedly
+
+Test payloads
+
+Analyse server responses
+
+Repeater is widely used during manual vulnerability testing, such as:
+
+SQL Injection
+
+XSS testing
+
+Parameter manipulation
+
+API testing
+
+What is Burp Repeater?
+
+Burp Repeater allows testers to:
+
+Capture → Modify → Resend → Analyse
+
+Requests captured from:
+
+Proxy → Send to Repeater → Test Payloads
+
+It functions similarly to tools like:
+
+cURL
+Postman
+
+but provides more control for security testing.
+
+Repeater Interface Components
+
+The Repeater interface consists of several sections.
+
+Request List
+
+Displays all requests sent to Repeater.
+
+Multiple requests can be tested simultaneously.
+
+Request Controls
+
+Controls include:
+
+Send request
+
+Cancel request
+
+Navigate request history
+
+Request / Response View
+
+Main working area.
+
+Request Panel
+
+Used to modify:
+
+URL
+
+Headers
+
+Parameters
+
+Body data
+
+Response Panel
+
+Displays the server response after sending the request.
+
+Layout Options
+
+Allows switching between layouts:
+
+Horizontal (default)
+
+Vertical
+
+Separate tabs
+
+Inspector
+
+Provides structured request editing.
+
+Allows easier modification of:
+
+headers
+
+parameters
+
+cookies
+
+Instead of editing raw HTTP requests.
+
+Target
+
+Shows where the request is being sent.
+
+Example:
+
+http://targetsite.com
+Sending Requests to Repeater
+
+Steps:
+
+1️⃣ Capture request using Burp Proxy
+
+2️⃣ Right-click request
+
+Send to Repeater
+
+or use shortcut:
+
+Ctrl + R
+
+3️⃣ Modify request
+
+4️⃣ Click Send
+
+5️⃣ Analyse response
+
+Response Display Modes
+
+Repeater provides different response views.
+
+Pretty
+
+Default formatted view.
+
+Improves readability.
+
+Raw
+
+Displays response exactly as received from server.
+
+Hex
+
+Shows response in hexadecimal format.
+
+Useful for analysing:
+
+binary files
+
+encoded data
+
+Render
+
+Displays the response like a web browser.
+
+Used to visualize:
+
+HTML page output
+Inspector Features
+
+Inspector allows structured editing.
+
+Main sections include:
+
+Request Query Parameters
+
+Parameters sent in URL.
+
+Example:
+
+GET /search?q=test
+
+Parameter:
+
+q = test
+Request Body Parameters
+
+Used for POST requests.
+
+Example:
+
+username=admin
+password=123
+Request Cookies
+
+Shows cookies sent with the request.
+
+Example:
+
+sessionid=abc123
+Request Headers
+
+Headers can be modified.
+
+Example:
+
+User-Agent
+Authorization
+Custom headers
+Response Headers
+
+Shows headers returned by the server.
+
+Example:
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+These cannot be modified.
+
+Practical Example
+
+Using Repeater to modify request headers.
+
+Original request:
+
+GET / HTTP/1.1
+Host: MACHINE_IP
+
+Added header:
+
+FlagAuthorised: True
+
+Modified request:
+
+GET / HTTP/1.1
+Host: MACHINE_IP
+FlagAuthorised: True
+
+Server response returns the flag.
+
+Flag
+THM{Yzg2MWI2ZDhlYzdlNGFiZTUzZTIzMzVi}
+Challenge: Trigger Server Error
+
+Testing input validation on endpoint:
+
+/products/{id}
+
+Captured request:
+
+GET /products/3
+
+Modified input to extreme value.
+
+Example:
+
+/products/999999999999999999
+
+Result:
+
+500 Internal Server Error
+Flag
+THM{N2MzMzFhMTA1MmZiYjA2YWQ4M2ZmMzhl}
+Advanced Challenge: SQL Injection
+
+Endpoint vulnerable to Union SQL Injection:
+
+/about/{id}
+Step 1 – Confirm SQL Injection
+
+Injected payload:
+
+/about/2'
+
+Result:
+
+500 Internal Server Error
+
+Server reveals SQL query:
+
+SELECT firstName, lastName, pfpLink, role, bio
+FROM people
+WHERE id = 2
+Step 2 – Extract Column Names
+
+Payload:
+
+/about/0 UNION ALL SELECT group_concat(column_name),null,null,null,null
+FROM information_schema.columns
+WHERE table_name="people"
+
+Columns discovered:
+
+id
+firstName
+lastName
+pfpLink
+role
+shortRole
+bio
+notes
+Step 3 – Extract Sensitive Data
+
+Target column:
+
+notes
+
+Payload:
+
+/about/0 UNION ALL SELECT notes,null,null,null,null
+FROM people
+WHERE id = 1
+
+Retrieved CEO notes containing the flag.
+
+Final Flag
+THM{ZGE3OTUyZGMyMzkwNjJmZjg3Mzk1NjJh}
+Key Skills Learned
+
+Using Burp Repeater for:
+
+Request manipulation
+
+Parameter testing
+
+Header injection
+
+Input validation testing
+
+SQL Injection exploitation
+
+Tools Used
+Burp Suite Community
+Burp Proxy
+Burp Repeater
+Flags Obtained
+THM{Yzg2MWI2ZDhlYzdlNGFiZTUzZTIzMzVi}
+
+THM{N2MzMzFhMTA1MmZiYjA2YWQ4M2ZmMzhl}
+
+THM{ZGE3OTUyZGMyMzkwNjJmZjg3Mzk1NjJh}
+
+Day 19
 
